@@ -22,31 +22,28 @@ public abstract class World {
     public abstract void run();
 
     /**
-     * Overridable method called after is world removed from Core
+     * Method called after is world removed from Core.
+     * Removes all
      */
-    public abstract void cleanUp();
+    public void cleanUp(){
+        destroyDrawables(drawables);
+        clearLists();
+    }
 
     /**
      * Automatically called in Core loop, checks collisions and does  doLogic() for all nodes
      */
-    protected  synchronized void clearLists(){
-        drawables.removeAll(drawablesRemoveList);
-
-        for(IDrawable drawable : drawablesToDestroy){
-            Core.removeDrawable(drawable, true);
-            drawablesRemoveList.remove(drawable);
-        }
+    protected void clearLists(){
+        drawables.removeAll(drawablesToDestroy);
+        drawablesToDestroy.forEach((IDrawable drawable)->Core.removeDrawable(drawable, true));
         drawablesToDestroy.clear();
 
-        for(IDrawable drawable : drawablesRemoveList){
-            Core.removeDrawable(drawable, false);
-        }
+        drawables.removeAll(drawablesRemoveList);
+        drawablesRemoveList.forEach((IDrawable drawable)->Core.removeDrawable(drawable, false));
         drawablesRemoveList.clear();
 
         drawables.addAll(drawablesAddingList);
-        for(IDrawable drawable : drawablesAddingList){
-            Core.addDrawable(drawable);
-        }
+        drawablesAddingList.forEach((IDrawable drawable)->Core.addDrawable(drawable));
         drawablesAddingList.clear();
     }
 
@@ -67,7 +64,7 @@ public abstract class World {
     }
 
     /**
-     * Inserts Drawables to World
+     * Safely removes Drawable from world
      * @param drawables drawables to remove
      */
     public void removeDrawables(List<IDrawable> drawables){
@@ -80,5 +77,21 @@ public abstract class World {
      */
     public void removeDrawable(IDrawable drawable) {
         drawablesRemoveList.add(drawable);
+    }
+
+    /**
+     * Safely removes Drawable from world and frees its resources
+     * @param drawables drawables to remove
+     */
+    public void destroyDrawables(List<IDrawable> drawables){
+        drawablesToDestroy.addAll(drawables);
+    }
+
+    /**
+     * Safely removes Drawable from world and frees its resources
+     * @param drawable - drawable to remove
+     */
+    public void destroyDrawable(IDrawable drawable) {
+        drawablesToDestroy.add(drawable);
     }
 }

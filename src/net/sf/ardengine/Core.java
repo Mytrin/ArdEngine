@@ -39,7 +39,7 @@ public class Core {
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	/**Version of library*/
-	public static String VERSION = "Archaic";
+	public static String VERSION = "Buildable";
 	/**True, if this build is experimental*/
 	public static final boolean DEBUG = true;
     /**True, if game currently runs in debugging mode*/
@@ -127,13 +127,11 @@ public class Core {
 	 * Called after start() to initialize engine components.
 	 */
 	public static final void init(){
-        //TODO Configurable background, move to gameInit()
         InputManager.getInstance().setMouseImage(Core.class.getClassLoader().getResourceAsStream("net/sf/ardengine/res/cursor.png"));
 
-        Sprite background = new Sprite(Core.class.getClassLoader().getResourceAsStream("net/sf/ardengine/res/ard_bg.png"));
+        Sprite background = game.getInitBackground();
         addDrawable(background);
 
-        if(world != null) world.clearLists();
         clearDrawableLists();
         renderer.render(drawables); //render before expensive sound init
         renderer.afterRender();
@@ -145,6 +143,7 @@ public class Core {
 
         SoundManager.init((renderer instanceof OpenGLRenderer)?Renderer.GL:Renderer.JAVAFX);
 
+        removeDrawable(background);
         game.gameInit();
 	}
 
@@ -159,6 +158,7 @@ public class Core {
                 //events -> node logic -> animations
                 InputManager.getInstance().update();
 
+                if(world != null) world.clearLists();
                 clearDrawableLists();
 
                 updateCollisions();
@@ -316,7 +316,7 @@ public class Core {
 	 * @param drawable drawable to add
 	 */
 	public static void addDrawable(IDrawable drawable){
-		drawablesToAdd.add(drawable);
+        drawablesToAdd.add(drawable);
 	}
 
     /**
@@ -340,7 +340,9 @@ public class Core {
      * @return list of game nodes
      */
     public static List<Node> getNodes() {
-        return nodes;
+        List<Node> saveCopy = new LinkedList<>();
+        saveCopy.addAll(nodes);
+        return saveCopy;
     }
 
     /**

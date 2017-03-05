@@ -85,4 +85,10 @@ public interface IGame {
     public default void removeDrawable(IDrawable drawable, boolean destroy){
         Core.removeDrawable(drawable, destroy);
     }
+
+    //UTILITY METHODS
+
+    public default Sprite getInitBackground(){
+        return new Sprite(Core.class.getClassLoader().getResourceAsStream("net/sf/ardengine/res/ard_bg.png"));
+    }
 }

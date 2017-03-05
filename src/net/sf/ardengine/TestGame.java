@@ -21,6 +21,7 @@ class TestGame implements IGame{
 
     @Override
     public void gameInit() {
+        addDrawable(getInitBackground());
         //Sprite test
         /*Sprite pngTest = new Sprite("test/lena.bmp");
         pngTest.setZ(-10);
