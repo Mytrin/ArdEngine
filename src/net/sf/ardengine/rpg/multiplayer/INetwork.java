@@ -1,0 +1,59 @@
+package net.sf.ardengine.rpg.multiplayer;
+
+import java.util.List;
+
+/**
+ * Defines which methods should be available for NetworkLogicalCore
+ */
+public interface INetwork {
+
+    /**
+     * Starts connecting or creation of network depending on implementing class
+     */
+    public void start();
+
+    /**
+     * Leaves current network
+     */
+    public void leave();
+
+    /**
+     * @return received messages since last call of getMessages()
+     */
+    public List<INetworkMessage> getMessages();
+
+    /**
+     * @return latest info about network users
+     */
+    public List<INetworkPlayer> getCurrentUsers();
+
+    /**
+     * Sends message to other client in Network
+     * @param target recipient
+     * @param message data
+     */
+    public void sendMessage(INetworkPlayer target, String message);
+
+    /**
+     * Sends message to other clients in Network
+     * @param message data
+     */
+    public void sendBroadcastMessage(String message);
+
+    /**
+     * Adds given listener to current listeners
+     * @param listener User's class responsible for dealing with events
+     */
+    public void addListener(INetworkListener listener);
+
+    /**
+     * Removes given listener from current listeners
+     * @param listener User's class responsible for dealing with events
+     */
+    public void removeListener(INetworkListener listener);
+
+    /**
+     * @return User's name in network
+     */
+    public String getUserName();
+}

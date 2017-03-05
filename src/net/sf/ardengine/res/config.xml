@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Default ArdEngine config file.
+-->
+<root>
+    <!-- Renderer -->
+    <item name="texture-quality" >BEST</item>
+    <item name="shape-quality" >BEST</item>
+    <item name="text-quality" >NORMAL</item>
+</root>
