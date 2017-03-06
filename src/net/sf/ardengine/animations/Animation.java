@@ -58,7 +58,7 @@ public abstract class Animation {
     /**
      * Method called after actTime >= stopTime
      */
-    public abstract void finish();
+    protected abstract void finish();
 
     /**(Re)starts the animation(Also adds it to manager, if previously removed).*/
     public void start(){ 

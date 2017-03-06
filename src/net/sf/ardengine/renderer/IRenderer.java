@@ -186,7 +186,7 @@ public interface IRenderer {
 	public IGroupImpl createGroupImplementation(Group parentGroup);
    
 	 /**
-    * @param fontName name of font from java to load 
+    * @param fontName path to font to load
     * @param size  Size of font
     * @param specialCharacters language dependent characters to load
     * @return font implementation for this renderer

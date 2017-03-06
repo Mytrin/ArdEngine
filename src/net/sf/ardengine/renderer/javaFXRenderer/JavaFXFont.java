@@ -1,6 +1,10 @@
 package net.sf.ardengine.renderer.javaFXRenderer;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.logging.Logger;
+
 import javafx.scene.text.Font;
 
 import net.sf.ardengine.text.IFont;
@@ -14,7 +18,18 @@ public class JavaFXFont implements IFont{
     * @param size  Size of font
     */
    public JavaFXFont(String fontName, int size){
-       fxFont = new Font(fontName, size);
+       Font loadedFont;
+       try{
+           File source = new File(fontName);
+           FileInputStream sourceStream =new FileInputStream(source);
+
+           loadedFont = Font.loadFont(sourceStream, size);
+           System.out.println(loadedFont.getName());
+       }catch(Exception e){
+           Logger.getLogger(JavaFXFont.class.getName()).severe("Failed when loading font "+fontName+": "+e);
+           loadedFont = new Font(size);
+       }
+       fxFont = loadedFont;
    }
    
 	 /**

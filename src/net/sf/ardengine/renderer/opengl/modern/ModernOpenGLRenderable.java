@@ -67,8 +67,10 @@ public abstract class ModernOpenGLRenderable {
     }
 
     protected void freeBuffers(){
-        GL15.glDeleteBuffers(vertexBuffers);
-        GL30.glDeleteVertexArrays(vertexArrays);
+        if(vertexBuffers != null){
+            GL15.glDeleteBuffers(vertexBuffers);
+            GL30.glDeleteVertexArrays(vertexArrays);
+        }
     }
 
     //CHANGEABLE METHODS

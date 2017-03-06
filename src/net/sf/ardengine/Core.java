@@ -201,9 +201,18 @@ public class Core {
             }
             drawables.remove(drawable);
         }
-
         renderer.removeChildren(drawablesToRemove);
         drawablesToRemove.clear();
+
+        for(IDrawable drawable : drawablesToDestroy){
+            if(drawable instanceof Node){
+                nodes.remove((Node)drawable);
+                ((Node) drawable).invokeEvent(new RemovalEvent());
+            }
+            drawables.remove(drawable);
+        }
+        renderer.destroyChildren(drawablesToDestroy);
+        drawablesToDestroy.clear();
     }
 
     /**
@@ -381,9 +390,9 @@ public class Core {
     }
 
     public static void main(String[] args) {
-		//start(Renderer.GL);
-        //start(Renderer.LEGACY_GL);
-		//start(Renderer.JAVAFX);
+		//start(new TestGame(), Renderer.GL);
+        //start(new TestGame(), Renderer.LEGACY_GL);
+		//start(new TestGame(), Renderer.JAVAFX);
         start(new TestGame(), Renderer.DONT_CARE);
 	}
 }

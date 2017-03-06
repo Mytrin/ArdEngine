@@ -52,11 +52,9 @@ public class MouseTracker extends Node{
     public void update(float mouseX, float mouseY){
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
-
         for(Node node: Core.getNodes()){
             if(node.isCollideable()){
                 NodeMouseState state = node.getMouseState();
-
                 if(mayIntersectWith(node) && collidesWith(node)){
                     if(!state.isMouseOver){
                         state.isMouseOver = true;
@@ -85,9 +83,8 @@ public class MouseTracker extends Node{
      * @param mouseY mouse coordinate at actual scene
      */
     public void mousePressed(InputTypes button, float mouseX, float mouseY){
-        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getWindowWidth());
-        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getWindowHeight());
-
+        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
+        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
         for(Node node: Core.getNodes()) {
             if (node.isCollideable()) {
                 NodeMouseState state = node.getMouseState();
@@ -131,8 +128,8 @@ public class MouseTracker extends Node{
      * @param mouseY mouse coordinate at actual scene
      */
     public void mouseReleased(InputTypes button, float mouseX, float mouseY) {
-        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getWindowWidth());
-        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getWindowHeight());
+        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());
+        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
 
         for(Node node: Core.getNodes()) {
             if (node.isCollideable()) {

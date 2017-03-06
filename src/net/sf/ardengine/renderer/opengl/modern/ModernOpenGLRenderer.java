@@ -119,8 +119,12 @@ public class ModernOpenGLRenderer extends OpenGLRenderer{
 
 	@Override
 	protected void viewMatrixChange(){
-		viewMatrix = Matrix.buildOrtographicMatrix(getWindowWidth(), getWindowHeight());
+		viewMatrix = Matrix.buildOrtographicMatrix(getBaseWindowWidth(), getBaseWindowHeight());
+		System.out.println(viewMatrix);
 		((Uniform.Matrix4x4)SPRITE_SHADER.getUniform("ortoMatrix")).setValue(viewMatrix);
+		((Uniform.Matrix4x4)TEXT_SHADER.getUniform("ortoMatrix")).setValue(viewMatrix);
+		((Uniform.Matrix4x4)SHAPE_SHADER.getUniform("ortoMatrix")).setValue(viewMatrix);
+		((Uniform.Matrix4x4)COLLISION_SHADER.getUniform("ortoMatrix")).setValue(viewMatrix);
 	}
 	
 	@Override
