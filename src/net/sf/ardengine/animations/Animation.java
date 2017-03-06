@@ -94,6 +94,7 @@ public abstract class Animation {
 
     /**Removes animation from AnimationManager*/
     public void destroy(){
+        isFinished = true;
         AnimationManager.removeAnimation(this);
     }
     

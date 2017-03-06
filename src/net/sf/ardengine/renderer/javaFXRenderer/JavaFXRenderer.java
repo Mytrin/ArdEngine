@@ -128,7 +128,7 @@ public class JavaFXRenderer extends Application implements IRenderer{
 			watcher.play();
 		}catch(Exception e){
 			//Something failed at initialization
-			//There is no renderer with loewer priority than this, so CRASH
+			//There is no renderer with lower priority than this, so CRASH
 			Core.notifyWhenRendererReady(this, RendererState.CRASH);
 			return;
 		}
@@ -162,10 +162,9 @@ public class JavaFXRenderer extends Application implements IRenderer{
     }
 
     private void updateSceneScale(){
-		
+
 		double newScaleX = stage.getWidth()/ baseWidth;
 		double newScaleY = stage.getHeight()/ baseHeight;
-		
 		if(newScaleX != scaleX){
 			scaleX = newScaleX;
 			children.setScaleX(scaleX);
@@ -176,20 +175,21 @@ public class JavaFXRenderer extends Application implements IRenderer{
 			children.setScaleY(scaleY);
 		}
 
+		//Scaled children are centered around their center
 		double centerX = children.getLayoutBounds().getMinX()+children.getLayoutBounds().getWidth()/2.0;
 		double centerY = children.getLayoutBounds().getMinY()+children.getLayoutBounds().getHeight()/2.0;
-		
+
 		double newDeltaX = centerX*children.getScaleX() - centerX;
 		double newDeltaY = centerY*children.getScaleY() - centerY;
-		
+
 		if(newDeltaX != deltaX){
-			 deltaX = newDeltaX;
-			 children.setLayoutX(deltaX);
+			deltaX = newDeltaX;
+			children.setLayoutX(deltaX);
 		}
-		
-		if(newDeltaY != deltaX){
-			 deltaY = newDeltaY;
-			 children.setLayoutY(deltaY);
+
+		if(newDeltaY != deltaY){
+			deltaY = newDeltaY;
+			children.setLayoutY(deltaY);
 		}
 	}
 	

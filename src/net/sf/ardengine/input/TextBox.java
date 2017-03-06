@@ -90,7 +90,7 @@ public class TextBox extends Group implements IKeyTyper{
         border.setStrokeWidth(1.5f);
 
         setCollideable(true);
-        getCollisions().add(new CollisionPolygon(new float[]{0, 0, width, 0, width, height, 0, height, 0, 0}, this));
+        updateCollisionShape();
 
         registerListener(new IListener() {
             @Override
@@ -127,6 +127,11 @@ public class TextBox extends Group implements IKeyTyper{
                 InputManager.getInstance().setActiveKeyTyper(TextBox.this);
             }
         });
+    }
+
+    protected void updateCollisionShape(){
+        getCollisions().clear();
+        getCollisions().add(new CollisionPolygon(new float[]{0, 0, width, 0, width, height, 0, height, 0, 0}, this));
     }
 
     /**

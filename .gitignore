@@ -9,3 +9,4 @@
 ArdEngine/ardengine_crash_report.log
 ArdEngine/ardengine_last_run_report.log
 /dist/
+/out/

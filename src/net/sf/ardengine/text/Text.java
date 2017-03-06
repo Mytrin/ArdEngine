@@ -52,7 +52,13 @@ public class Text extends Node {
 		implementation.textChanged(text);
 		updateCollisions();
 	}
-	
+
+	@Override
+	public void setColor(javafx.scene.paint.Color color) {
+		this.color = color;
+		implementation.colorChanged(color);
+	}
+
 	/**
 	 * @return content of this Text 
 	 */

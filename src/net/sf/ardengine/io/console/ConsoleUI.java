@@ -184,11 +184,10 @@ public class ConsoleUI extends TextBox {
             float windowWidth = Core.renderer.getBaseWindowWidth();
             float windowHeight = Core.renderer.getBaseWindowHeight()/3;
 
-            if(INSTANCE.getHeight() != windowHeight){
+            if(INSTANCE.getHeight() != windowHeight || INSTANCE.getWidth() != windowWidth){
                 INSTANCE.setHeight(windowHeight);
-            }
-            if(INSTANCE.getWidth() != windowWidth){
                 INSTANCE.setWidth(windowWidth);
+                INSTANCE.updateCollisionShape();
             }
         }
         INSTANCE.isShown = !INSTANCE.isShown;

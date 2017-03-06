@@ -1,5 +1,6 @@
 package net.sf.ardengine.renderer.javaFXRenderer;
 
+import javafx.scene.paint.Color;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.text.IFont;
 import net.sf.ardengine.text.ITextImpl;
@@ -21,9 +22,9 @@ public class JavaFXTextImpl extends Text implements ITextImpl, IJavaFXGroupable{
 	@Override
 	public void draw() {
         setX(parentText.getX() - (!parentText.isStatic()? Core.cameraX:0));
-        //coordinates are from different corner
-		setY(parentText.getY() - (!parentText.isStatic()? Core.cameraY:0) - getFont().getSize());
-	}
+        //JavaFX handles text coords and window size slightly different that LWJGL
+		setY(parentText.getY() - (!parentText.isStatic()? Core.cameraY:0) + getFont().getSize()/2);
+    }
 
 	@Override
 	public void groupDraw() {
@@ -39,7 +40,6 @@ public class JavaFXTextImpl extends Text implements ITextImpl, IJavaFXGroupable{
         setOpacity(parentText.getOpacity());
         setScaleX(parentText.getScale());
         setScaleY(parentText.getScale());
-        setFill(parentText.getColor());
     }
 
     @Override
@@ -47,7 +47,12 @@ public class JavaFXTextImpl extends Text implements ITextImpl, IJavaFXGroupable{
 		//nothing to do
 	}
 
-	@Override
+    @Override
+    public void colorChanged(Color newColor) {
+        setFill(newColor);
+    }
+
+    @Override
 	public void textChanged(String newText) {
 		setText(newText);
 	}
@@ -64,11 +69,11 @@ public class JavaFXTextImpl extends Text implements ITextImpl, IJavaFXGroupable{
 	
 	@Override
 	public float getWidth() {
-		return (float)this.getLayoutBounds().getWidth();
+		return (float)this.getBoundsInLocal().getWidth();
 	}
 	
 	@Override
 	public float getHeight() {
-		return (float)this.getLayoutBounds().getHeight();
+		return (float)this.getBoundsInLocal().getHeight();
 	}
 }

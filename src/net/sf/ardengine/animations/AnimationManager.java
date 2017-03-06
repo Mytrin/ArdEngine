@@ -13,20 +13,13 @@ public class AnimationManager {
     private static final List<Animation> animationsToRemove=new LinkedList<>();
     
     public static void animate(){
-         for(Animation animation : animations){
-             animation.update();
-         }  
-         
-         for(Animation animation : animationsToRemove){
-            animations.remove(animation);
-         }
-         animationsToRemove.clear();
-         
-         for(Animation animation : animationsToAdd){
-            animations.add(animation);
-         }
-         animationsToAdd.clear();
-         
+        animations.removeAll(animationsToRemove);
+        animationsToRemove.clear();
+
+        animations.addAll(animationsToAdd);
+        animationsToAdd.clear();
+
+        animations.forEach((Animation animation)->animation.update());
     } 
     /**Adds animation to manager, so it can be refreshed every loop.
      */

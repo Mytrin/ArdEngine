@@ -261,6 +261,11 @@ public class ModernOpenGLTextImpl extends ModernOpenGLRenderable implements ITex
     }
 
     @Override
+    public void colorChanged(Color newColor) {
+        redraw = true;
+    }
+
+    @Override
     public void wrapWidthChanged(int newWrapWidth) {
         recalculateSize();
         redraw = true;

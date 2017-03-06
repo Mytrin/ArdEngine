@@ -5,6 +5,12 @@ import net.sf.ardengine.renderer.IDrawableImpl;
 
 public interface ITextImpl extends IDrawableImpl{
 
+	/**
+	 * Called by text when its color has been changed
+	 * @param newColor - new color
+	 */
+	public void colorChanged(Color newColor);
+
     /**
      * Called by text when its font has been changed
      * @param newText - new text

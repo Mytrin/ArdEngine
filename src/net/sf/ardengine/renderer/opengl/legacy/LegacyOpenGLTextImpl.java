@@ -195,6 +195,9 @@ public class LegacyOpenGLTextImpl implements ITextImpl {
     }
 
     @Override
+    public void colorChanged(Color newColor) {}
+
+    @Override
     public void textChanged(String newText) {
         recalculateSize();
     }
