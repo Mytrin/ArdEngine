@@ -36,16 +36,19 @@ import net.sf.ardengine.renderer.IDrawableImpl;
 		
 		/**
 		 * Sets the X coord of drawable
+		 * @param newX new X coord
 		 */
 		public void setX(float newX);
 		
 		/**
 		 * Sets the Y coord of drawable
+		 * @param newY new Y coord
 		 */
 		public void setY(float newY);
 		
 		/**
 		 * Sets the Z coord of drawable
+		 * @param newZ new Z coord
 		 */
 		public void setZ(float newZ);
 
@@ -91,28 +94,28 @@ import net.sf.ardengine.renderer.IDrawableImpl;
 		/**
 		 * Automatically used by Core
 		 * 
-		 * Returns offset x used to be render this object on static position.
+		 * @return offset x used to be render this object on static position.
 		 */
 		public float getStaticX();
 		
 		/**
 		 * Automatically used by Core
 		 * 
-		 * Returns offset x used to be render this object on static position.
+		 * @return offset x used to be render this object on static position.
 		 */
 		public float getStaticY();
 		
 		/**
 		 * Automatically used by Core
 		 * 
-		 * Sets offset x used to be render this object on static position.
+		 * @param newStaticX new offset x used to be render this object on static position.
 		 */
 		public void setStaticX(float newStaticX);
 		
 		/**
 		 * Automatically used by Core
 		 * 
-		 * Sets offset x used to be render this object on static position.
+		 * @param newStaticY offset y used to be render this object on static position.
 		 */
 	    public void setStaticY(float newStaticY);
 	    
@@ -124,8 +127,8 @@ import net.sf.ardengine.renderer.IDrawableImpl;
 	    public boolean isStatic();
 	    
 	    /**
-	     * 
-	     * If true, drawable automatically changes position with moving game camera.
+	     *
+		 * @param staticLock true, if drawable should automatically change position with moving game camera.
 	     */
 	    public void setStatic(boolean staticLock);
 
@@ -140,32 +143,32 @@ import net.sf.ardengine.renderer.IDrawableImpl;
         public float getHeight();
 
         /**
-         * Changes the opacity of this drawable
+         *  @param newOpacity new opacity of this drawable
          */
         public void setOpacity(float newOpacity);
 
         /**
-         * Returns the opacity of this drawable
+         * @return the opacity of this drawable
          */
         public float getOpacity();
 
         /**
-         * Changes the scale of this drawable (1 is default)
+         * @param newScale new scale of this drawable (1 is default)
          */
         public void setScale(float newScale);
 
         /**
-         * Returns the scale of this drawable (1 is default)
+         * @return scale of this drawable (1 is default)
          */
         public float getScale();
 
         /**
-         * Sets the angle by which is drawable rotated around its center( clockwise)
+         * @param angle new angle by which is drawable rotated around its center( clockwise)
          */
         public void setAngle(float angle);
 
         /**
-         * Returns the angle by which is drawable rotated around its center( clockwise)
+         * @return the angle by which is drawable rotated around its center( clockwise)
          */
         public float getAngle();
 

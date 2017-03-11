@@ -147,11 +147,11 @@ public class PrivateAreaRect implements IRenderableCollision {
         aktScale=parentNode.getScale();
     }
 
-     /**Does privateArea count with scale?*/
+     /**@return withScale true if this PrivateAreaRect counts with scale*/
      public boolean testsWithScale(){
          return withScale;
      }
-     /**Should privateArea count with scale?*/
+    /**@param test true if this PrivateAreaRect should count with scale*/
      public void testWithScale(boolean test){
          withScale=test;
      }

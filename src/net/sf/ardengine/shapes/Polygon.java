@@ -25,7 +25,7 @@ public class Polygon extends Node implements IShape{
 	
 	/**
 	 * Sets new coords of this polygon
-	 * @param coords
+	 * @param coords new vertex coords in [x1, y1, x2, y2] format
 	 */
 	public void setCoords(float[] coords) {
 		this.coords = coords;

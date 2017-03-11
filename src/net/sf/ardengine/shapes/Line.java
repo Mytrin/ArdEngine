@@ -32,7 +32,7 @@ public class Line extends Node implements IShape{
 
     /**
      * Sets new vertexes of this line
-     * @param coords
+     * @param coords new vertex coords in [x1, y1, x2, y2] format
      */
     public void setCoords(float[] coords) {
         this.coords = coords;

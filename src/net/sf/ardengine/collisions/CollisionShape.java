@@ -17,22 +17,26 @@ public abstract class CollisionShape implements IRenderableCollision {
 	protected float aktScale = 1;
 
 	/**
-	 * @return true if both this and target shapes share space
+	 * @param cs target shape which may collide
+	 * @return true if both this and target shape share space
 	 */
 	public abstract boolean isColliding(CollisionShape cs);
 
 	/**
+	 * @param e Node, for which is represented by this CollisionShape
 	 * Updates shape's coords based on node's coords(called automatically by
 	 * Node).
 	 */
 	public abstract void updateProperties(Node e);
 
-	/** Does shape count with scale? */
+	/**
+	 * @return true if shape counts with scale
+	 * */
 	public boolean testsWithScale() {
 		return withScale;
 	}
 
-	/** Should shape count with scale? */
+	/** @param test true if shape should count with node scale  */
 	public void testWithScale(boolean test) {
 		withScale = test;
 	}

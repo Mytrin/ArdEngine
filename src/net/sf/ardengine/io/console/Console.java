@@ -56,6 +56,7 @@ class Console {
     }
 
     /**
+     * @param module name of requested module
      * @return registered module with given name or throw exception
      */
     public ConsoleModule getModule(String module){

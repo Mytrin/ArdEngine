@@ -18,7 +18,7 @@ import java.util.List;
  * ArdEngine console singleton,
  * renders heavily customized command TextBox at 1/3 of window
  *
- * To support new commands, check <class>ConsoleModule</class>
+ * To support new commands, check class ConsoleModule
  */
 public class ConsoleUI extends TextBox {
     /**Singleton*/
@@ -249,6 +249,7 @@ public class ConsoleUI extends TextBox {
     }
 
     /**
+     * @param moduleName Name of requested module
      * @return registered module with given name or throw exception
      */
     public static ConsoleModule getRegisteredModule(String moduleName){

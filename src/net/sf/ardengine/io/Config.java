@@ -57,7 +57,6 @@ public final class Config {
      * Loads and sets new configuration.
      * @param is Stream to config file
      *
-     * @throws java.lang.Exception
      */
     public synchronized static final void loadConfig(InputStream is){
         try{

@@ -9,7 +9,7 @@ import java.util.Map;
  * debug.enable() means, that process("enable", null)
  * will be called on ConsoleModule with name "debug"
  *
- * Attach new modules by <method>ConsoleUI.attachModule()</method>
+ * Attach new modules by ConsoleUI.attachModule()
  */
 public class ConsoleModule {
 

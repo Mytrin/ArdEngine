@@ -81,6 +81,7 @@ public class MouseTracker extends Node{
      * Checks collision and dispatches required events for pressed mouse
      * @param mouseX mouse coordinate at actual scene
      * @param mouseY mouse coordinate at actual scene
+     * @param button related mouse button
      */
     public void mousePressed(InputTypes button, float mouseX, float mouseY){
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
@@ -126,6 +127,7 @@ public class MouseTracker extends Node{
      * Checks collision and dispatches required events for released mouse
      * @param mouseX mouse coordinate at actual scene
      * @param mouseY mouse coordinate at actual scene
+     * @param button related mouse button
      */
     public void mouseReleased(InputTypes button, float mouseX, float mouseY) {
         setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());

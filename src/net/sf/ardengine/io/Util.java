@@ -33,7 +33,8 @@ public final class Util {
 	 * @param source path to resource
 	 * @param defaultSize potential starting size of buffer from streamToByteBuffer
 	 * @return ByteBuffer with data
-	 * @throws IOException
+	 *
+	 * @throws IOException thrown if file on given path does not exists or is not readable
      */
 	public static ByteBuffer sourceToByteBuffer(String source, int defaultSize) throws IOException{
 		if ( Files.isReadable(Paths.get(source)) ) {
@@ -46,6 +47,8 @@ public final class Util {
 	 * @param source the file to read
 	 *
 	 * @return buffer filled from given source
+	 *
+	 * @throws IOException thrown if file does not exists or is not readable
 	 */
 	public static ByteBuffer fileToByteBuffer(File source) throws IOException{
 		ByteBuffer buffer = BufferUtils.createByteBuffer((int)source.length() + 1);
@@ -67,6 +70,8 @@ public final class Util {
 	 * @param is  the input stream to read
 	 * @param size  size of new buffer
 	 * @return buffer filled from given source
+	 *
+	 * @throws IOException thrown if given InputStream is corrupted or given size wrong
 	 */
 	public static ByteBuffer streamToByteBuffer(InputStream is, int size) throws IOException{
 		ByteBuffer buffer = BufferUtils.createByteBuffer(size);

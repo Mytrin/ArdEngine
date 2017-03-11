@@ -107,7 +107,8 @@ public class Core {
 	
 	/**
 	 * Used automatically, calls gameInit(), 
-	 * @param newRenderer Sucessfuly initialized renderer, or null
+	 * @param newRenderer related renderer, which sends info or null
+     * @param state state of renderer initialization
 	 */
 	public static final void notifyWhenRendererReady(IRenderer newRenderer, RendererState state){
 		if(state == RendererState.READY){
@@ -290,7 +291,7 @@ public class Core {
 
     /**
      * Automatically called by node, when its Z has been changed
-     * @param drawable
+     * @param drawable node with changed Z
      */
     public static void childrenZChanged(IDrawable drawable){
         if(!drawables.remove(drawable)){

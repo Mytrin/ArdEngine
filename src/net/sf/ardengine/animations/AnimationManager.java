@@ -22,11 +22,13 @@ public class AnimationManager {
         animations.forEach((Animation animation)->animation.update());
     } 
     /**Adds animation to manager, so it can be refreshed every loop.
+     * @param animation added animation
      */
     protected static void addAnimation(Animation animation){
         animationsToAdd.add(animation);
     }
     /**Removes animation from manager, so it will be refreshed no more.
+     * @param animation removed animation
      */
     protected static void removeAnimation(Animation animation){
         animationsToRemove.add(animation);

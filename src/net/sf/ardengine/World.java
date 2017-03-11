@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * World serves as container for nodes and sprites, which should be loaded
- * and maintained only after fulfilling some condition(Menu->Start new game).
+ * and maintained only after fulfilling some condition(Menu - Start new game).
  */
 public abstract class World {
     /**World drawables*/

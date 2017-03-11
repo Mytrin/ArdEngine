@@ -53,10 +53,11 @@ public abstract class Animation {
     
     /**
      * Method called every update
+     * @param delta Ms passed since last update
      */
     public abstract void run(long delta);
     /**
-     * Method called after actTime >= stopTime
+     * Method called after actTime is larger or equal to stopTime
      */
     protected abstract void finish();
 
