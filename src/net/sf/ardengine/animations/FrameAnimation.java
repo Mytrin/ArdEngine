@@ -1,6 +1,5 @@
 package net.sf.ardengine.animations;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class FrameAnimation extends Animation{
       * @param keyFrames Frames to do 
       * @param repeatCount Count of animation repeats(-1 = infinite) 
       */
-    public FrameAnimation(long duration, LinkedList<Frame>keyFrames,int repeatCount){
+    public FrameAnimation(long duration, List<Frame>keyFrames,int repeatCount){
    	 super(duration, repeatCount);
        this.keyFrames=keyFrames;
         //using LinkedList, because of implemented remove()
@@ -47,7 +46,7 @@ public class FrameAnimation extends Animation{
 			keyFrames.remove(keyFrame);
 		}
 
-		for (Frame keyFrame : doneKeyFrames) { // refill frames to do
+		for (Frame keyFrame : doneKeyFrames) { // refill frames to prepare for restart
 			keyFrames.add(keyFrame);
 		}
 		doneKeyFrames.clear();

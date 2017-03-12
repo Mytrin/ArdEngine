@@ -175,8 +175,6 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 	
 	@Override
 	public void render(List<IDrawable> drawables) {
-			TextureManager.getInstance().update();
-			
 			window.clear();
 
 			for(IDrawable drawable: drawables){

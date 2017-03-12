@@ -32,29 +32,12 @@ public class TextureManager {
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	private static TextureManager instance;
-	//TODO lock object!
-	protected final ArrayList<Operation> operations = new ArrayList<>();
 	protected final HashMap<String, Texture> textures = new HashMap<>();
 	
 	private TextureManager() {
 		
 	}
-	
-	/**
-	 * Called automatically by renderer from GLFW thread,
-	 * performs operation given by other threads before rendering this frame.
-	 */
-	public synchronized void update(){
-		for(Operation operation : operations){
-			try{
-				operation.execute();
-			}catch(Exception e){
-				LOGGER.log(Level.SEVERE, "Texture manager failed operation", e);
-			}
-		}
-		operations.clear();
-	}
-	
+
 	/**
 	 * Calls loadTexture(String name, File source)
 	 * 
@@ -81,7 +64,7 @@ public class TextureManager {
 				LOGGER.severe("Texture loading IO error "+e);
 				throw new RuntimeException(e);
 			}
-			operations.add(new loadSTBTextureOperation(name, imageBuffer));
+			new loadSTBTextureOperation(name, imageBuffer).execute();
 		}else{
 			LOGGER.severe("Texture source "+source.getPath()+" not found!");
 			
@@ -105,12 +88,12 @@ public class TextureManager {
 			LOGGER.severe("Texture loading IO error "+e);
 			throw new RuntimeException(e);
 		}
-		operations.add(new loadSTBTextureOperation(name, imageBuffer));
+		new loadSTBTextureOperation(name, imageBuffer).execute();
 	}
 		
 	/**
 	 * Informs TextureManager to load this texture.
-	 * This method uses java.awt, instead of LWJGL port of STB.
+	 * This method uses java.awt, instead of LWJGL version of STB.
 	 * 
 	 * @param name name of the texture
 	 * @param img buffered image with texture content
@@ -118,7 +101,7 @@ public class TextureManager {
 	public void loadTexture(String name, BufferedImage img){
 		if(checkIfExists(name)) return;
 
-		operations.add(new LoadBufferedImageTextureOperation(name, img));
+		new LoadBufferedImageTextureOperation(name, img).execute();
 	}
 	
 	/**
@@ -150,20 +133,20 @@ public class TextureManager {
 	 * @param name name of the texture
 	 */
 	public void deleteTexture(String name){
-		operations.add(new DeleteTextureOperation(name));
+		new DeleteTextureOperation(name).execute();
 	}
 
     /**
-     * Adds creation of font texture between upcoming operations
+     * Creaes font texture
      * @param font font which have not called load() yet
      */
-    public void loadSTBFont(STBFont font) { operations.add(new LoadSTBFontOperation(font)); }
+    public void loadSTBFont(STBFont font) { new LoadSTBFontOperation(font).execute(); }
 
     /**
-     * Adds deleting of font texture between upcoming operations
-     * @param font font which have not called load() yet
+     * Deletes font texture
+     * @param font font to release
      */
-    public void deleteSTBFont(STBFont font) { operations.add(new DeleteSTBFontOperation(font)); }
+    public void deleteSTBFont(STBFont font) { new DeleteSTBFontOperation(font).execute(); }
 
 
 	/**
