@@ -24,23 +24,30 @@ public class LegacyOpenGLSpriteImpl implements ISpriteImpl{
 
     public LegacyOpenGLSpriteImpl(InputStream is, ASprite parentSprite){
         this.textureName = "genericSprite"+genericSprites;
-        TextureManager.getInstance().loadTexture(textureName, is);
         genericSprites++;
+
+        TextureManager.getInstance().loadTexture(textureName, is);
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
 
         this.parentSprite = parentSprite;
     }
 
     public LegacyOpenGLSpriteImpl(BufferedImage buf, ASprite parentSprite){
         this.textureName = "genericSprite"+genericSprites;
-        TextureManager.getInstance().loadTexture(textureName, buf);
         genericSprites++;
+
+        TextureManager.getInstance().loadTexture(textureName, buf);
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
 
         this.parentSprite = parentSprite;
     }
 
     public LegacyOpenGLSpriteImpl(String url, ASprite parentSprite){
         this.textureName = url;
+
         TextureManager.getInstance().loadTexture(url);
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
+
         this.parentSprite = parentSprite;
     }
 
@@ -54,10 +61,7 @@ public class LegacyOpenGLSpriteImpl implements ISpriteImpl{
     @Override
     public void draw() {
         if(spriteTexture == null){
-            spriteTexture = TextureManager.getInstance().getTexture(textureName);
-            if(spriteTexture == null){
-                return; //TODO substitute maybe?
-            }
+            return; //TODO substitute, exception maybe?
         }
 
         glPushMatrix();

@@ -40,23 +40,30 @@ public class ModernOpenGLSpriteImpl extends ModernOpenGLRenderable implements IS
 	
 	public ModernOpenGLSpriteImpl(InputStream is, ASprite parentSprite){
 		this.textureName = "genericSprite"+genericSprites;
+        genericSprites++;
+
 		TextureManager.getInstance().loadTexture(textureName, is);
-		genericSprites++;
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
 		
 		this.parentSprite = parentSprite;
 	}
 
 	public ModernOpenGLSpriteImpl(BufferedImage buf, ASprite parentSprite){
 		this.textureName = "genericSprite"+genericSprites;
+        genericSprites++;
+
 		TextureManager.getInstance().loadTexture(textureName, buf);
-		genericSprites++;
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
 		
 		this.parentSprite = parentSprite;
 	}
 	
 	public ModernOpenGLSpriteImpl(String url, ASprite parentSprite){
 		this.textureName = url;
+
 		TextureManager.getInstance().loadTexture(url);
+        this.spriteTexture = TextureManager.getInstance().getTexture(textureName);
+
 		this.parentSprite = parentSprite;
 	}
 	
@@ -70,10 +77,7 @@ public class ModernOpenGLSpriteImpl extends ModernOpenGLRenderable implements IS
 	@Override
 	public void draw() {
 		if(spriteTexture == null){
-			spriteTexture = TextureManager.getInstance().getTexture(textureName);
-			if(spriteTexture == null){
-				return; //TODO substitute maybe?
-			}
+			return; //TODO substitute maybe, exception?
 		}
 
         if(requiresInit){
