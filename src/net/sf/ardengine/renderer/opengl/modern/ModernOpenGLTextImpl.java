@@ -302,6 +302,8 @@ public class ModernOpenGLTextImpl extends ModernOpenGLRenderable implements ITex
 
     @Override
     protected float getRenderOpacity() {
+        if(redraw) return 1;
+
         return parent.getOpacity();
     }
 
