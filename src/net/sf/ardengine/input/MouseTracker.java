@@ -1,9 +1,11 @@
 package net.sf.ardengine.input;
 
 import net.sf.ardengine.Core;
+import net.sf.ardengine.Group;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.collisions.CollisionPolygon;
 import net.sf.ardengine.events.EventType;
+import net.sf.ardengine.events.IEvent;
 import net.sf.ardengine.events.MouseEvent;
 import net.sf.ardengine.renderer.IDrawableImpl;
 
@@ -44,6 +46,26 @@ public class MouseTracker extends Node{
                 tolerance, tolerance, tolerance, 0}, this));
     }
 
+    private void updateMouseMovementState(Node node){
+        if(node.isCollideable()){
+            NodeMouseState state = node.getMouseState();
+            if(mayIntersectWith(node) && collidesWith(node)){
+                if(!state.isMouseOver){
+                    state.isMouseOver = true;
+                    //System.out.println("Mouse moved");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, InputTypes.MOUSE_NONE, getX(), getY()));
+                }
+            }else{
+                if(state.isMouseOver && !state.isMouseDragged){
+                    state.isMouseOver = false;
+                    state.mouseOut();
+                    //System.out.println("Mouse out");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, InputTypes.MOUSE_NONE, getX(), getY()));
+                }
+            }
+        }
+    }
+
     /**
      * Checks collision and dispatches required events
      * @param mouseX mouse coordinate at actual scene
@@ -53,27 +75,50 @@ public class MouseTracker extends Node{
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
         for(Node node: Core.getNodes()){
-            if(node.isCollideable()){
-                NodeMouseState state = node.getMouseState();
-                if(mayIntersectWith(node) && collidesWith(node)){
-                    if(!state.isMouseOver){
-                        state.isMouseOver = true;
-                        //System.out.println("Mouse moved");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, InputTypes.MOUSE_NONE, getX(), getY()));
-                    }
-                }else{
-                    if(state.isMouseOver && !state.isMouseDragged){
-                        state.isMouseOver = false;
-                        state.mouseOut();
-                        //System.out.println("Mouse out");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, InputTypes.MOUSE_NONE, getX(), getY()));
-                    }
-                }
+            if(node instanceof Group){
+                ((Group)node).forEachChildren((Node child)->updateMouseMovementState(child));
             }
+            updateMouseMovementState(node);
         }
 
         for(Node node: draggedNodes){
             node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAGGED, InputTypes.MOUSE_NONE, getX(), getY()));
+        }
+    }
+
+    private void updateMousePressedState(Node node, InputTypes button){
+        if (node.isCollideable()) {
+            NodeMouseState state = node.getMouseState();
+
+            if (mayIntersectWith(node) && collidesWith(node)) {
+                if(!state.isMouseOver){
+                    state.isMouseOver = true;
+                    //System.out.println("Mouse move");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
+                }
+
+                if(!state.isMousePressed) {
+                    if (node.isDraggable() && !state.isMouseDragged) {
+                        state.isMouseDragged = true;
+                        draggedNodes.add(node);
+                        //System.out.println("Mouse drag start");
+                        node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_STARTED, button, getX(), getY()));
+                    }
+                }
+
+                if(state.pressedMouseButton(button)){
+                    //System.out.println("Mouse pressed");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_PRESSED, button, getX(), getY()));
+                }
+
+            }else{
+                if(state.isMouseOver && !draggedNodes.contains(node)){
+                    state.isMouseOver = false;
+                    state.mouseOut();
+                    //System.out.println("Mouse out");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
+                }
+            }
         }
     }
 
@@ -87,37 +132,37 @@ public class MouseTracker extends Node{
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
         for(Node node: Core.getNodes()) {
-            if (node.isCollideable()) {
-                NodeMouseState state = node.getMouseState();
+            if(node instanceof Group){
+                ((Group)node).forEachChildren((Node child)->updateMousePressedState(child, button));
+            }
+            updateMousePressedState(node, button);
+        }
+    }
 
-                if (mayIntersectWith(node) && collidesWith(node)) {
-                    if(!state.isMouseOver){
-                        state.isMouseOver = true;
-                        //System.out.println("Mouse move");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
-                    }
+    private void updateMouseReleasedState(Node node, InputTypes button){
+        if (node.isCollideable()) {
+            NodeMouseState state = node.getMouseState();
 
-                    if(!state.isMousePressed) {
-                        if (node.isDraggable() && !state.isMouseDragged) {
-                            state.isMouseDragged = true;
-                            draggedNodes.add(node);
-                            //System.out.println("Mouse drag start");
-                            node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_STARTED, button, getX(), getY()));
-                        }
-                    }
+            if (mayIntersectWith(node) && collidesWith(node)) {
+                if(!state.isMouseOver){
+                    state.isMouseOver = true;
+                    //System.out.println("Mouse moved");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
+                }
 
-                    if(state.pressedMouseButton(button)){
-                        //System.out.println("Mouse pressed");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_PRESSED, button, getX(), getY()));
-                    }
-
-                }else{
-                    if(state.isMouseOver && !draggedNodes.contains(node)){
-                        state.isMouseOver = false;
-                        state.mouseOut();
-                        //System.out.println("Mouse out");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
-                    }
+                if(state.isMousePressed){
+                    state.releasedMouseButton(button);
+                    //System.out.println("Mouse clicked");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_CLICKED, button, getX(), getY()));
+                }
+                //System.out.println("Mouse released");
+                node.invokeEvent(new MouseEvent(EventType.MOUSE_RELEASED, button, getX(), getY()));
+            }else{
+                if(state.isMouseOver && !draggedNodes.contains(node)){
+                    state.isMouseOver = false;
+                    state.mouseOut();
+                    //System.out.println("Mouse out");
+                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
                 }
             }
         }
@@ -134,32 +179,10 @@ public class MouseTracker extends Node{
         setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
 
         for(Node node: Core.getNodes()) {
-            if (node.isCollideable()) {
-                NodeMouseState state = node.getMouseState();
-
-                if (mayIntersectWith(node) && collidesWith(node)) {
-                    if(!state.isMouseOver){
-                        state.isMouseOver = true;
-                        //System.out.println("Mouse moved");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
-                    }
-
-                    if(state.isMousePressed){
-                        state.releasedMouseButton(button);
-                        //System.out.println("Mouse clicked");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_CLICKED, button, getX(), getY()));
-                    }
-                    //System.out.println("Mouse released");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_RELEASED, button, getX(), getY()));
-                }else{
-                    if(state.isMouseOver && !draggedNodes.contains(node)){
-                        state.isMouseOver = false;
-                        state.mouseOut();
-                        //System.out.println("Mouse out");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
-                    }
-                }
+            if(node instanceof Group){
+                ((Group)node).forEachChildren((Node child)->updateMouseReleasedState(child, button));
             }
+            updateMouseReleasedState(node, button);
         }
 
         for(Node dragged : draggedNodes){

@@ -228,12 +228,7 @@ public class Core {
                 Node possibleIntruder = nodes.get(j);
 
                 if(collideable.mayIntersectWith(possibleIntruder)){
-                    CollisionEvent collisionEvent = collideable.eventIfCollidesWith(possibleIntruder);
-
-                    if(collisionEvent != null){
-                        collideable.invokeEvent(collisionEvent);
-                        possibleIntruder.invokeEvent(collisionEvent.swap());
-                    }
+                    collideable.eventIfCollidesWith(possibleIntruder);
                 }
             }
         }

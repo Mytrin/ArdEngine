@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javafx.scene.paint.Color;
+import net.sf.ardengine.Group;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.SpriteSheet;
 import net.sf.ardengine.collisions.CollisionShape;
@@ -181,6 +182,10 @@ public class ModernOpenGLRenderer extends OpenGLRenderer{
 
 				for(CollisionShape shape :collideable.getCollisions()){
 					ModernCollisionRenderer.draw(shape);
+				}
+
+				if(collideable instanceof Group){
+					renderCollisions(((Group)collideable).getChildren());
 				}
 			}
 		}

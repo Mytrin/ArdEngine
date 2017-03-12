@@ -1,7 +1,6 @@
 package net.sf.ardengine;
 
 import javafx.scene.paint.Color;
-import net.sf.ardengine.events.CollisionEvent;
 import net.sf.ardengine.renderer.IDrawableImpl;
 import net.sf.ardengine.renderer.IGroupImpl;
 
@@ -92,6 +91,16 @@ public class Group extends Node{
         children.remove(child);
         implementation.childRemoved(child);
         recalculateSize();
+    }
+
+    /**
+     * @return Duplicate list of group Children
+     */
+    public List<Node> getChildren() {
+        LinkedList<Node> copyChildren = new LinkedList<>();
+        children.forEach((Node node) -> copyChildren.add(node));
+
+        return copyChildren;
     }
 
     /**
@@ -260,17 +269,10 @@ public class Group extends Node{
     }
 
     @Override
-    public CollisionEvent eventIfCollidesWith(Node intruder){
-        CollisionEvent collides = super.eventIfCollidesWith(intruder);
+    public void eventIfCollidesWith(Node intruder){
+        super.eventIfCollidesWith(intruder);
 
-        if(collides!= null ) return collides;
-
-        for(Node child: children){
-            collides = child.eventIfCollidesWith(intruder);
-            if(collides!=null) return collides;
-        }
-
-        return null;
+        children.forEach((Node child)->child.eventIfCollidesWith(intruder));
     }
 
     @Override

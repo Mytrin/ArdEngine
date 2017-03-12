@@ -356,20 +356,28 @@ public abstract class Node implements IDrawable{
     }
 
     /**
+     * If intruder is instance fo Group, children will be checked for collision and
+     * CollisionEvents will be invoked independently.
      * @param intruder Node, which was detected by checkAreaToList() or mayIntersectWith()
      * @return CollisionEvent, if nodes really collide, or null
      */
-    public CollisionEvent eventIfCollidesWith(Node intruder){
-        if(!isCollideable) return null;
+    public void eventIfCollidesWith(Node intruder){
+        if(!isCollideable) return;
 
         for(CollisionShape collision : collisions){
+
+            if(intruder instanceof Group){
+                ((Group)intruder).forEachChildren((Node child)->child.eventIfCollidesWith(this));
+            }
+
             for(CollisionShape intruderCollision : intruder.collisions){
                 if(collision.isColliding(intruderCollision)){
-                    return new CollisionEvent(this, intruder, collision, intruderCollision);
+                    CollisionEvent collisionEvent = new CollisionEvent(this, intruder, collision, intruderCollision);
+                    intruder.invokeEvent(collisionEvent);
+                    invokeEvent(collisionEvent);
                 }
             }
         }
-        return null;
     }
 
     /**

@@ -8,13 +8,19 @@ import net.sf.ardengine.renderer.IGroupImpl;
 
 //Using JavaFX Group, which is much better, but not usable
 //for other other renderers.
-public class JavaFXGroupImpl extends Group implements IGroupImpl {
+public class JavaFXGroupImpl extends Group implements IGroupImpl, IJavaFXGroupable {
 
     private net.sf.ardengine.Group parentGroup;
 
     public JavaFXGroupImpl(net.sf.ardengine.Group parentGroup){
         super();
         this.parentGroup = parentGroup;
+    }
+
+    @Override
+    public void groupDraw() {
+        setLayoutX(parentGroup.getLayoutX());
+        setLayoutY(parentGroup.getLayoutY());
     }
 
     @Override
