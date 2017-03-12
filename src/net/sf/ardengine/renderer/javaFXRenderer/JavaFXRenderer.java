@@ -118,7 +118,7 @@ public class JavaFXRenderer extends Application implements IRenderer{
 			stage.setTitle(IRenderer.DEFAULT_WINDOW_TITLE+" - JavaFX");
 			stage.setHeight(baseHeight);
 			stage.setWidth(baseWidth);
-			stage.setOnCloseRequest(close -> Core.destroy());
+			stage.setOnCloseRequest(close -> Core.exit());
 			stage.show();
 
             inputReceiver = new JavaFXInputReceiver(scene);

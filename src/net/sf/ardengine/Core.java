@@ -180,7 +180,8 @@ public class Core {
 
             }
         }else{
-            System.exit(1);
+
+            System.exit(0);
         }
     }
 
@@ -312,16 +313,21 @@ public class Core {
 	/**
     * Disposes resources before exit.
     */
-	public static final void destroy() {
+	protected static final void destroy() {
         game.gameCleanUp();
 
         renderer.removeChildren(drawables);
 		renderer.cleanUp();
 
         SoundManager.cleanUp();
-
-		gameRunning = false;
 	}
+
+    /**
+     * Cleans resources and closes window
+     */
+	public static void exit(){
+        gameRunning = false;
+    }
 
 	/**
 	 * Starts rendering drawable every loop

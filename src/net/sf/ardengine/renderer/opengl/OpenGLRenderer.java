@@ -169,7 +169,7 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 		glfwPollEvents();
 			
 		if(window.closeRequested()){
-			Core.destroy();
+			Core.exit();
 		}
 	}
 	
