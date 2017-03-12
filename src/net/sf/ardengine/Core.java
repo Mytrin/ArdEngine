@@ -189,13 +189,8 @@ public class Core {
      * inserts drawables to main list.
      */
     private static void clearDrawableLists(){
-        //ADDING AND REMOVING DRAWABLES
-        for(IDrawable newDrawable : drawablesToAdd){
-            insertDrawable(newDrawable);
-        }
-        drawablesToAdd.clear();
-
-		for(IDrawable drawable : drawablesToRemove){
+        //REMOVING MUST BE BEFORE ADDING TO GENERATE CORRECT Z
+        for(IDrawable drawable : drawablesToRemove){
             if(drawable instanceof Node){
                 nodes.remove((Node)drawable);
                 ((Node) drawable).invokeEvent(new RemovalEvent());
@@ -214,6 +209,12 @@ public class Core {
         }
         renderer.destroyChildren(drawablesToDestroy);
         drawablesToDestroy.clear();
+
+        for(IDrawable newDrawable : drawablesToAdd){
+            insertDrawable(newDrawable);
+        }
+        drawablesToAdd.clear();
+
     }
 
     /**
@@ -275,10 +276,11 @@ public class Core {
 	 */
    private static void insertDrawable(IDrawable drawable){
   		 int index = findZOrderPosition(drawable);
-     	 
-     	 if(index>=drawables.size()){
-    		 renderer.childAdded(drawable, drawables.size());
-     		 drawables.add(drawable); //add to end of ArrayList
+
+       if(index>=drawables.size()){
+           //Please note that childAdded must be before drawables.add()!
+            renderer.childAdded(drawable, drawables.size());
+            drawables.add(drawable); //add to end of ArrayList
      	 }else{
      		drawables.add(index, drawable); 
      		renderer.childAdded(drawable, index);

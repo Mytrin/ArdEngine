@@ -41,7 +41,7 @@ public class Entity extends Node {
 
     @Override
     public IDrawableImpl getImplementation() {
-        return null;
+        return sprite.getImplementation();
     }
 
     /**
