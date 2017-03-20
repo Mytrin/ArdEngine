@@ -25,8 +25,9 @@ public class SpriteSheetCalc {
     public SpriteSheetCalc(ASprite parentSprite, float sheetWidth, float sheetHeight) {
         partWidth = parentSprite.getWidth();
         partHeight = parentSprite.getHeight();
-        rows = (int)Math.ceil(sheetWidth/partWidth);
-        cols = (int)Math.ceil(sheetHeight/partHeight);
+        cols = (int)Math.ceil(sheetWidth/partWidth);
+        rows = (int)Math.ceil(sheetHeight/partHeight);
+
         rowUV = 1f/rows;
         colUV = 1f/cols;
 
@@ -35,7 +36,7 @@ public class SpriteSheetCalc {
 
     public float[] createPartUV(int index){
         int row = (int)Math.floor(index/cols);
-        int col = index%rows;
+        int col = index%cols;
 
         float startWidth = col*colUV;
         float startHeight = row*rowUV;
@@ -52,7 +53,7 @@ public class SpriteSheetCalc {
 
     public float[] getPartLegacyUV(int index){
         int row = (int)Math.floor(index/cols);
-        int col = index%rows;
+        int col = index%cols;
 
         float startWidth = col*colUV;
         float startHeight = row*rowUV;
@@ -60,8 +61,8 @@ public class SpriteSheetCalc {
         float endHeight = startHeight+rowUV;
 
         return new float[]{
-                startWidth,     startHeight,
-                endWidth,     endHeight
+                startWidth, startHeight,
+                endWidth,   endHeight
         };
     }
 

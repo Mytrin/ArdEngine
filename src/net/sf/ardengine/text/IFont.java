@@ -2,7 +2,7 @@ package net.sf.ardengine.text;
 
 public interface IFont {
 
-	public static final char[] CZECH_CHARACTERS = ("ÁáÉéÍíÓóÚúŮůČčŘřŽžÝýěňťď").toCharArray();
+	public static final char[] CZECH_CHARACTERS = ("ÁáÉéÍíÓóÚúŮůČčŘřŽžÝýěňťďŠš").toCharArray();
 
     /** Automatically called by FontManager to notify renderer*/
     public void free();

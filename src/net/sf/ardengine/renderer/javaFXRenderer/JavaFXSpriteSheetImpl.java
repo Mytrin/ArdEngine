@@ -60,7 +60,8 @@ public class JavaFXSpriteSheetImpl extends JavaFXSpriteImpl implements ISpriteSh
         float endWidth = newCoords[2] * (float)getImage().getWidth();
         float endHeight = newCoords[3] * (float)getImage().getHeight();
 
-        Rectangle2D viewport = new Rectangle2D(startWidth, startHeight, endWidth, endHeight);
+        Rectangle2D viewport = new Rectangle2D(startWidth, startHeight,
+                endWidth-startWidth, endHeight-startHeight);
         setViewport(viewport);
     }
 
