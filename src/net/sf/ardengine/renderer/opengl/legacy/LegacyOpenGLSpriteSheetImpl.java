@@ -36,11 +36,10 @@ public class LegacyOpenGLSpriteSheetImpl extends LegacyOpenGLSpriteImpl implemen
     private void init(){
         sheetCalc = new SpriteSheetCalc(parentSprite, spriteTexture);
         setPartIndex(currentIndex);
-
     }
 
     protected void render(float width, float height){
-        if(sheetCalc== null){
+        if(sheetCalc == null){
             init();
         }
 

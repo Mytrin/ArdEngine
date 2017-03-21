@@ -77,7 +77,7 @@ public class ModernOpenGLSpriteImpl extends ModernOpenGLRenderable implements IS
 	@Override
 	public void draw() {
 		if(spriteTexture == null){
-			return; //TODO substitute maybe, exception?
+			return; //TODO substitute, exception?
 		}
 
         if(requiresInit){

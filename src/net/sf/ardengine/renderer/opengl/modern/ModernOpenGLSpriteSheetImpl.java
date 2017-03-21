@@ -2,6 +2,7 @@ package net.sf.ardengine.renderer.opengl.modern;
 
 import net.sf.ardengine.SpriteSheet;
 import net.sf.ardengine.renderer.ISpriteSheetImpl;
+import net.sf.ardengine.renderer.opengl.lib.shader.Shader;
 import net.sf.ardengine.renderer.util.SpriteSheetCalc;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL15;
@@ -42,10 +43,9 @@ public class ModernOpenGLSpriteSheetImpl extends ModernOpenGLSpriteImpl implemen
     }
 
     @Override
-    public void draw() {
+    protected void customBind() {
+        super.customBind();
         if(rebindUV && sheetCalc!=null) rebindUVBuffer(currentUV);
-
-        super.draw();
     }
 
     @Override
