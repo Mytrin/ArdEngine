@@ -46,8 +46,29 @@ public class MouseTracker extends Node{
                 tolerance, tolerance, tolerance, 0}, this));
     }
 
+    /**
+     * Checks collision and dispatches required events
+     * @param mouseX mouse coordinate at actual scene
+     * @param mouseY mouse coordinate at actual scene
+     */
+    public void update(float mouseX, float mouseY){
+        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
+        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+        for(Node node: Core.getNodes()){
+            groupMouseMovement(node);
+            updateMouseMovementState(node);
+        }
+
+        for(Node node: draggedNodes){
+            node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAGGED, InputTypes.MOUSE_NONE, getX(), getY()));
+        }
+    }
+
     private void updateMouseMovementState(Node node){
         if(node.isCollideable()){
+
+            groupMouseMovement(node);
+
             NodeMouseState state = node.getMouseState();
             if(mayIntersectWith(node) && collidesWith(node)){
                 if(!state.isMouseOver){
@@ -66,29 +87,32 @@ public class MouseTracker extends Node{
         }
     }
 
+    private void groupMouseMovement(Node node){
+        if(node instanceof Group){
+            ((Group)node).forEachChildren((Node child)->updateMouseMovementState(child));
+        }
+    }
+
     /**
-     * Checks collision and dispatches required events
+     * Checks collision and dispatches required events for pressed mouse
      * @param mouseX mouse coordinate at actual scene
      * @param mouseY mouse coordinate at actual scene
+     * @param button related mouse button
      */
-    public void update(float mouseX, float mouseY){
+    public void mousePressed(InputTypes button, float mouseX, float mouseY){
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
-        for(Node node: Core.getNodes()){
-            if(node instanceof Group){
-                ((Group)node).forEachChildren((Node child)->updateMouseMovementState(child));
-            }
-            updateMouseMovementState(node);
-        }
-
-        for(Node node: draggedNodes){
-            node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAGGED, InputTypes.MOUSE_NONE, getX(), getY()));
+        for(Node node: Core.getNodes()) {
+            groupMousePressed(node, button);
+            updateMousePressedState(node, button);
         }
     }
 
     private void updateMousePressedState(Node node, InputTypes button){
         if (node.isCollideable()) {
             NodeMouseState state = node.getMouseState();
+
+            groupMousePressed(node, button);
 
             if (mayIntersectWith(node) && collidesWith(node)) {
                 if(!state.isMouseOver){
@@ -122,25 +146,39 @@ public class MouseTracker extends Node{
         }
     }
 
+    private void groupMousePressed(Node node, InputTypes button){
+        if(node instanceof Group){
+            ((Group)node).forEachChildren((Node child)->updateMousePressedState(child, button));
+        }
+    }
+
     /**
-     * Checks collision and dispatches required events for pressed mouse
+     * Checks collision and dispatches required events for released mouse
      * @param mouseX mouse coordinate at actual scene
      * @param mouseY mouse coordinate at actual scene
      * @param button related mouse button
      */
-    public void mousePressed(InputTypes button, float mouseX, float mouseY){
-        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
-        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+    public void mouseReleased(InputTypes button, float mouseX, float mouseY) {
+        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());
+        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
+
         for(Node node: Core.getNodes()) {
-            if(node instanceof Group){
-                ((Group)node).forEachChildren((Node child)->updateMousePressedState(child, button));
-            }
-            updateMousePressedState(node, button);
+            groupMouseReleased(node, button);
+            updateMouseReleasedState(node, button);
         }
+
+        for(Node dragged : draggedNodes){
+            dragged.getMouseState().isMouseDragged = false;
+            dragged.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_ENDED, button, getX(), getY()));
+        }
+        draggedNodes.clear();
     }
 
     private void updateMouseReleasedState(Node node, InputTypes button){
         if (node.isCollideable()) {
+
+            groupMouseReleased(node, button);
+
             NodeMouseState state = node.getMouseState();
 
             if (mayIntersectWith(node) && collidesWith(node)) {
@@ -168,28 +206,10 @@ public class MouseTracker extends Node{
         }
     }
 
-    /**
-     * Checks collision and dispatches required events for released mouse
-     * @param mouseX mouse coordinate at actual scene
-     * @param mouseY mouse coordinate at actual scene
-     * @param button related mouse button
-     */
-    public void mouseReleased(InputTypes button, float mouseX, float mouseY) {
-        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());
-        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
-
-        for(Node node: Core.getNodes()) {
-            if(node instanceof Group){
-                ((Group)node).forEachChildren((Node child)->updateMouseReleasedState(child, button));
-            }
-            updateMouseReleasedState(node, button);
+    private void groupMouseReleased(Node node, InputTypes button){
+        if(node instanceof Group){
+            ((Group)node).forEachChildren((Node child)->updateMouseReleasedState(child, button));
         }
-
-        for(Node dragged : draggedNodes){
-            dragged.getMouseState().isMouseDragged = false;
-            dragged.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_ENDED, button, getX(), getY()));
-        }
-        draggedNodes.clear();
     }
 
     /**

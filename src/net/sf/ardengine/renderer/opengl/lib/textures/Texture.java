@@ -102,7 +102,7 @@ public class Texture {
 	 * Notifies Texture, that it's shared between more objects
 	 */
 	public void increaseUsage(){
-		usage--;
+		usage++;
 	}
 	
 	/** 

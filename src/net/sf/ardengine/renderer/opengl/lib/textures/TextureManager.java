@@ -279,6 +279,7 @@ public class TextureManager {
 			if(toDelete != null){
 				toDelete.lowerUsage();
 				if(toDelete.getUsage() <= 0){
+                    LOGGER.info ("Deleting Texture: "+name);
 					toDelete.free();
 					textures.remove(name);
 				}

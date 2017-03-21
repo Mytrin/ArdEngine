@@ -40,7 +40,10 @@ public class Group extends Node{
      * @param action action called on children
      */
     public void forEachChildren(Consumer<Node> action){
-        children.forEach((child)->action.accept(child));
+        //safer than forEach
+        for(int i=0; i < children.size(); i++){
+            action.accept(children.get(i));
+        }
     }
 
     /**
