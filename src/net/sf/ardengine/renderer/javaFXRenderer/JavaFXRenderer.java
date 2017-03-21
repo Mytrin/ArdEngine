@@ -152,6 +152,7 @@ public class JavaFXRenderer extends Application implements IRenderer{
 
 	@Override
 	public void cleanUp() {
+	    children.getChildren().clear();
 		watcher.stop();
 		//JavaFX cleanups automatically
 	}

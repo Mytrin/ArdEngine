@@ -180,7 +180,7 @@ public class Core {
 
             }
         }else{
-
+            destroy();
             System.exit(0);
         }
     }
@@ -315,7 +315,7 @@ public class Core {
 		renderer.cleanUp();
 
         SoundManager.cleanUp();
-	}
+    }
 
     /**
      * Cleans resources and closes window

@@ -21,6 +21,8 @@ public class JavaFXGroupImpl extends Group implements IGroupImpl, IJavaFXGroupab
     public void groupDraw() {
         setLayoutX(parentGroup.getLayoutX());
         setLayoutY(parentGroup.getLayoutY());
+
+        drawChildren();
     }
 
     @Override
@@ -28,6 +30,10 @@ public class JavaFXGroupImpl extends Group implements IGroupImpl, IJavaFXGroupab
         setLayoutX(parentGroup.getX()- (!parentGroup.isStatic()? Core.cameraX:0));
         setLayoutY(parentGroup.getY()- (!parentGroup.isStatic()? Core.cameraY:0));
 
+        drawChildren();
+    }
+
+    private void drawChildren(){
         for (javafx.scene.Node child : getChildren()){
             ((IJavaFXGroupable)child).groupDraw();
         }

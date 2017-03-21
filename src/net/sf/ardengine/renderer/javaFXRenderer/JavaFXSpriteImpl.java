@@ -79,6 +79,8 @@ public class JavaFXSpriteImpl extends ImageView implements ISpriteImpl, IJavaFXG
 
     private void setColor(Color color){
         if(color != Color.WHITE){
+        	setClip(new ImageView(getImage()));
+
             ColorAdjust monochrome = new ColorAdjust();
             monochrome.setSaturation(-1.0);
 
