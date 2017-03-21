@@ -103,6 +103,10 @@ public class Core {
 			case DONT_CARE: OpenGLRenderer.setupRenderer(Renderer.GL, 800, 600); break;
 			default: JavaFXRenderer.createRenderer(800, 600); break;
 		}
+
+		//In case of failure or JavaFX
+        destroy();
+        System.exit(1);
 	}
 	
 	/**
@@ -116,11 +120,10 @@ public class Core {
 			LOGGER.info("Initialization of selected renderer has been successful!");
 			init();
 		}else if(state == RendererState.FAILED){
-			LOGGER.warning("Initialization of selected renderer failed, falling to JavaFX!");
+			LOGGER.severe("Initialization of selected renderer failed, falling to JavaFX!");
             JavaFXRenderer.createRenderer(800, 600);
 		}else{
 			LOGGER.severe("Initialization of fallback renderer failed!");
-			System.exit(1);
 		}
 	}
 	
@@ -176,8 +179,6 @@ public class Core {
                     renderer.renderCollisions(nodes);
                 }
                 renderer.afterRender();
-
-
             }
         }else{
             destroy();

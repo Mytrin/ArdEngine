@@ -31,7 +31,7 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	/**Input manager*/
-	protected CallbackInput inputManager = new CallbackInput();
+	protected CallbackInput inputManager;
 	/**Window handle*/
 	protected OpenGLWindow window;
 
@@ -64,6 +64,7 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 		LOGGER.info("LWJGL version: " + Version.getVersion());
 		
 		if (glfwInit()) {
+			inputManager = new CallbackInput();
             window = new OpenGLWindow(width, height);
             window.create(inputManager, getMajorVersion(), getMinorVersion());
 
@@ -125,7 +126,7 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 		  				currentFPScount = 0;
 		  			}
 		  			
-		  			update(); //Updates I/O
+		  			updateInput();
 		  			
 		  			Core.run(delta);
 
@@ -143,9 +144,9 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 	 * @param height Height of new window
 	 */
 	public static void setupRenderer(Renderer glMode, int width, int height){
-		OpenGLRenderer renderer;
-
         try{
+            OpenGLRenderer renderer;
+
             if(glMode == Renderer.GL){
 				renderer = new ModernOpenGLRenderer(width, height);
             }else{
@@ -159,17 +160,17 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
                 Core.notifyWhenRendererReady(null, RendererState.FAILED);
             }
 
-        }catch(UnsatisfiedLinkError e){
+        }catch(Throwable e){
             LOGGER.severe(e.getMessage());
             Core.notifyWhenRendererReady(null, RendererState.FAILED);
         }
 	}
 	
-	protected void update(){
+	protected void updateInput(){
 		glfwPollEvents();
 			
 		if(window.closeRequested()){
-			Core.exit();
+            Core.exit();
 		}
 	}
 	

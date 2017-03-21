@@ -198,6 +198,8 @@ public class ConsoleUI extends TextBox {
      * @param e error
      */
     public static void printError(Throwable e){
+        if(e == null || e.getMessage() == null) return;
+
         if(e instanceof Console.ConsoleException){
             print("CEE:"+e.getMessage());
         }else{
