@@ -40,6 +40,13 @@ public class TextBox extends Group implements IKeyTyper{
 
     /**True, if textbox accepts input*/
     private boolean isEditable = true;
+    /**True, if pressing enter creates new line*/
+    private boolean isMultiline = true;
+
+    /**Color of border when not active*/
+    private Color borderColor = Color.BLUE;
+    /**Color of border when active*/
+    private Color hoveredBorderColor = Color.BLACK;
 
     /**
      * Generates empty TextBox using default font with wrapping width equal to width-1
@@ -100,7 +107,7 @@ public class TextBox extends Group implements IKeyTyper{
 
             @Override
             public void process(IEvent event) {
-                border.setColor(Color.BLUE);
+                border.setColor(hoveredBorderColor);
             }
         });
 
@@ -112,7 +119,7 @@ public class TextBox extends Group implements IKeyTyper{
 
             @Override
             public void process(IEvent event) {
-                border.setColor(Color.BLACK);
+                border.setColor(borderColor);
             }
         });
 
@@ -200,7 +207,9 @@ public class TextBox extends Group implements IKeyTyper{
 
     @Override
     public void enterPressed() {
-        keyTyped('\n');
+        if(isMultiline){
+            keyTyped('\n');
+        }
     }
 
     /**
@@ -263,7 +272,7 @@ public class TextBox extends Group implements IKeyTyper{
 
     /**
      *
-     * @param opacity opacity of background rectangle
+     * @param opacity opacity of backgtrueround rectangle
      */
     public void setBackgroundOpacity(float opacity) {
         background.setOpacity(opacity);
@@ -280,6 +289,7 @@ public class TextBox extends Group implements IKeyTyper{
      * @param color color of surrounding lines
      */
     public void setBorderColor(Color color) {
+        borderColor = color;
         border.setColor(color);
     }
 
@@ -360,5 +370,26 @@ public class TextBox extends Group implements IKeyTyper{
         public String getCustomEventType() {
             return TEXT_CHANGE_EVENT_TYPE;
         }
+    }
+
+    /**
+     * @return True, if pressing enter creates new line
+     */
+    public boolean isMultiline() {
+        return isMultiline;
+    }
+
+    /**
+     * @param multiline True, if pressing enter creates new line
+     */
+    public void setMultiline(boolean multiline) {
+        isMultiline = multiline;
+    }
+
+    /**
+     * @param hoveredBorderColor Color of border when active
+     */
+    public void setHoveredBorderColor(Color hoveredBorderColor) {
+        this.hoveredBorderColor = hoveredBorderColor;
     }
 }

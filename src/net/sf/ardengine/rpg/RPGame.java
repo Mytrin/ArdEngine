@@ -1,7 +1,9 @@
 package net.sf.ardengine.rpg;
 
+import com.google.gson.Gson;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.IGame;
+import net.sf.ardengine.dialogs.Dialogs;
 
 /**
  * Game class with set up RPG features.
@@ -9,9 +11,13 @@ import net.sf.ardengine.IGame;
 public abstract class RPGame implements IGame {
 
     /**Game logic handler*/
-   private ANetworkCore logicalCore;
+    private ANetworkCore logicalCore;
+    /**Dialog loader*/
+    protected Dialogs dialogs = new Dialogs();
 
-    //TODO dialogs
+    public RPGame(){
+
+    }
 
 
     @Override
