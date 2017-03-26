@@ -36,7 +36,7 @@ public interface INetworkListener {
     public void kicked();
 
     /**
-     * Called when file has been shared from server
+     * Called when file has been shared from network
      * @param file received file
      */
     public void fileReceived(File file);

@@ -1,6 +1,5 @@
 package net.sf.ardengine.rpg;
 
-import com.google.gson.Gson;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.IGame;
 import net.sf.ardengine.dialogs.Dialogs;

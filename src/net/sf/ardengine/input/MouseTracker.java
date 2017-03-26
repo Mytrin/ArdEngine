@@ -27,6 +27,16 @@ public class MouseTracker extends Node{
     /**Width and height of collision rectangle starting at mouse [0;0]*/
     private int tolerance;
 
+    /**Events are generated every test loop, so they can be consumed*/
+    private MouseEvent dragStartEvent = null;
+    private MouseEvent dragEndEvent = null;
+    private MouseEvent draggedEvent = null;
+    private MouseEvent movedEvent = null;
+    private MouseEvent exitedEvent = null;
+    private MouseEvent pressedEvent = null;
+    private MouseEvent releasedEvent = null;
+    private MouseEvent clickedEvent = null;
+
     /**
      * @param tolerance Width and height of collision rectangle starting at mouse [0;0]
      */
@@ -46,6 +56,20 @@ public class MouseTracker extends Node{
                 tolerance, tolerance, tolerance, 0}, this));
     }
 
+    private void regenerateEvents(InputTypes mouseButton){
+        float x = getX();
+        float y = getY();
+
+        dragStartEvent = new MouseEvent(EventType.MOUSE_DRAG_STARTED, mouseButton, x, y);
+        draggedEvent = new MouseEvent(EventType.MOUSE_DRAGGED, mouseButton, x, y);
+        dragEndEvent = new MouseEvent(EventType.MOUSE_DRAG_ENDED, mouseButton, x, y);
+        movedEvent = new MouseEvent(EventType.MOUSE_MOVED, mouseButton, getX(), getY());
+        exitedEvent = new MouseEvent(EventType.MOUSE_OUT, mouseButton, getX(), getY());
+        pressedEvent = new MouseEvent(EventType.MOUSE_PRESSED, mouseButton, getX(), getY());;
+        releasedEvent = new MouseEvent(EventType.MOUSE_RELEASED, mouseButton, getX(), getY());;
+        clickedEvent =  new MouseEvent(EventType.MOUSE_CLICKED, mouseButton, x, y);;
+    }
+
     /**
      * Checks collision and dispatches required events
      * @param mouseX mouse coordinate at actual scene
@@ -54,13 +78,15 @@ public class MouseTracker extends Node{
     public void update(float mouseX, float mouseY){
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+
+        regenerateEvents(InputTypes.MOUSE_NONE);
+
         for(Node node: Core.getNodes()){
-            groupMouseMovement(node);
             updateMouseMovementState(node);
         }
 
         for(Node node: draggedNodes){
-            node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAGGED, InputTypes.MOUSE_NONE, getX(), getY()));
+            node.invokeEvent(draggedEvent);
         }
     }
 
@@ -74,14 +100,14 @@ public class MouseTracker extends Node{
                 if(!state.isMouseOver){
                     state.isMouseOver = true;
                     //System.out.println("Mouse moved");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, InputTypes.MOUSE_NONE, getX(), getY()));
+                    node.invokeEvent(movedEvent);
                 }
             }else{
                 if(state.isMouseOver && !state.isMouseDragged){
                     state.isMouseOver = false;
                     state.mouseOut();
                     //System.out.println("Mouse out");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, InputTypes.MOUSE_NONE, getX(), getY()));
+                    node.invokeEvent(exitedEvent);
                 }
             }
         }
@@ -102,8 +128,10 @@ public class MouseTracker extends Node{
     public void mousePressed(InputTypes button, float mouseX, float mouseY){
         setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
         setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+
+        regenerateEvents(button);
+
         for(Node node: Core.getNodes()) {
-            groupMousePressed(node, button);
             updateMousePressedState(node, button);
         }
     }
@@ -118,7 +146,7 @@ public class MouseTracker extends Node{
                 if(!state.isMouseOver){
                     state.isMouseOver = true;
                     //System.out.println("Mouse move");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
+                    node.invokeEvent(movedEvent);
                 }
 
                 if(!state.isMousePressed) {
@@ -126,13 +154,13 @@ public class MouseTracker extends Node{
                         state.isMouseDragged = true;
                         draggedNodes.add(node);
                         //System.out.println("Mouse drag start");
-                        node.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_STARTED, button, getX(), getY()));
+                        node.invokeEvent(dragStartEvent);
                     }
                 }
 
                 if(state.pressedMouseButton(button)){
                     //System.out.println("Mouse pressed");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_PRESSED, button, getX(), getY()));
+                    node.invokeEvent(pressedEvent);
                 }
 
             }else{
@@ -140,7 +168,7 @@ public class MouseTracker extends Node{
                     state.isMouseOver = false;
                     state.mouseOut();
                     //System.out.println("Mouse out");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
+                    node.invokeEvent(exitedEvent);
                 }
             }
         }
@@ -162,14 +190,15 @@ public class MouseTracker extends Node{
         setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());
         setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
 
+        regenerateEvents(button);
+
         for(Node node: Core.getNodes()) {
-            groupMouseReleased(node, button);
             updateMouseReleasedState(node, button);
         }
 
         for(Node dragged : draggedNodes){
             dragged.getMouseState().isMouseDragged = false;
-            dragged.invokeEvent(new MouseEvent(EventType.MOUSE_DRAG_ENDED, button, getX(), getY()));
+            dragged.invokeEvent(dragEndEvent);
         }
         draggedNodes.clear();
     }
@@ -185,22 +214,22 @@ public class MouseTracker extends Node{
                 if(!state.isMouseOver){
                     state.isMouseOver = true;
                     //System.out.println("Mouse moved");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_MOVED, button, getX(), getY()));
+                    node.invokeEvent(movedEvent);
                 }
 
                 if(state.isMousePressed){
                     state.releasedMouseButton(button);
                     //System.out.println("Mouse clicked");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_CLICKED, button, getX(), getY()));
+                    node.invokeEvent(clickedEvent);
                 }
                 //System.out.println("Mouse released");
-                node.invokeEvent(new MouseEvent(EventType.MOUSE_RELEASED, button, getX(), getY()));
+                node.invokeEvent(releasedEvent);
             }else{
                 if(state.isMouseOver && !draggedNodes.contains(node)){
                     state.isMouseOver = false;
                     state.mouseOut();
                     //System.out.println("Mouse out");
-                    node.invokeEvent(new MouseEvent(EventType.MOUSE_OUT, button, getX(), getY()));
+                    node.invokeEvent(exitedEvent);
                 }
             }
         }

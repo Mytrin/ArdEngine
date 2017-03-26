@@ -288,7 +288,12 @@ public class JavaFXRenderer extends Application implements IRenderer{
 	public void setDesiredFPS(int desiredFPS) {
 		LOGGER.warning("JavaFX renderer cannot use other fps than 60!");
 	}
-	
+
+	@Override
+	public int getDesiredFPS() {
+		return 60;
+	}
+
 	@Override
 	public void childAdded(IDrawable child, int index) {
 		IDrawableImpl childNode = child.getImplementation();

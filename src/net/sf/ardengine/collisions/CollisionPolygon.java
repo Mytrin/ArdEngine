@@ -22,20 +22,36 @@ public class CollisionPolygon extends CollisionShape {
 	 * @param coords
 	 *            Coords of polygon([x1,y1,x2,y2...]) (like node's [X0;Y0] would
 	 *            be [0;0])
-	 * @param e
+	 * @param targetNode
 	 *            Node, for which is shape created
 	 */
-	public CollisionPolygon(float[] coords, Node e) {
+	public CollisionPolygon(float[] coords, Node targetNode) {
 		this.coords = coords;
-		centerX = e.getX() + e.getWidth() / 2;
-		centerY = e.getY() + e.getHeight() / 2;
+		centerX = targetNode.getX() + targetNode.getWidth() / 2;
+		centerY = targetNode.getY() + targetNode.getHeight() / 2;
 		actCoords = new float[coords.length];
 		for (int i = 0; i < coords.length - 1; i += 2) {
-			actCoords[i] = (coords[i] + e.getX());
-			actCoords[i + 1] = coords[i + 1] + e.getY();
+			actCoords[i] = (coords[i] + targetNode.getX());
+			actCoords[i + 1] = coords[i + 1] + targetNode.getY();
 		}
-		updateProperties(e);
+		updateProperties(targetNode);
 	}
+
+	/**
+     * Creates collision polygon with size of target node
+	 * @param targetNode
+	 *            Node, for which is shape created
+	 */
+	public CollisionPolygon(Node targetNode) {
+		this(getBoundingBox(targetNode), targetNode);
+	}
+
+	private static float[] getBoundingBox(Node targetNode){
+	    float nodeWidth = targetNode.getWidth();
+        float nodeHeight = targetNode.getHeight();
+	    return new float[]{0, 0, nodeWidth, 0, nodeWidth,
+                nodeHeight, 0, nodeHeight};
+    }
 
 	@Override
 	public boolean isColliding(CollisionShape cs) {

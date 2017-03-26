@@ -1,5 +1,6 @@
 package net.sf.ardengine.rpg.multiplayer;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -56,4 +57,12 @@ public interface INetwork {
      * @return User's name in network
      */
     public String getUserName();
+
+    /**
+     * Sends file to current members of Network
+     * @param file file to send
+     * @param fileName id of file for other clients
+     * @param listener object to notify, when task is finished
+     */
+    public void shareFile(File file, String fileName, INetworkFileListener listener);
 }

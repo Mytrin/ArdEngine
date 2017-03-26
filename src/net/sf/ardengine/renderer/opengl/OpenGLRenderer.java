@@ -242,7 +242,12 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 	public int getAverageFPS() {
 		return averageFps;
 	}
-	
+
+	@Override
+	public int getDesiredFPS() {
+		return FPS;
+	}
+
 	@Override
 	public int getWindowHeight() {
 		if(window != null) return window.getRealHeight();

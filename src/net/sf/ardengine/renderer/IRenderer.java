@@ -123,6 +123,11 @@ public interface IRenderer {
     * @param desiredFPS - desired count of updates per second.
     */
    public void setDesiredFPS(int desiredFPS);
+
+	/**
+	 * @return count of updates per second.
+	 */
+	public int getDesiredFPS();
    
    /**
     * @param buf - buffered image with sprite content

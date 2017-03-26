@@ -6,11 +6,9 @@ import com.gmail.lepeska.martin.udplib.client.ClientGroupNetwork;
 import com.gmail.lepeska.martin.udplib.client.GroupUser;
 import com.gmail.lepeska.martin.udplib.server.ServerGroupNetwork;
 import com.gmail.lepeska.martin.udplib.util.ConfigLoader;
-import net.sf.ardengine.rpg.multiplayer.INetwork;
-import net.sf.ardengine.rpg.multiplayer.INetworkListener;
-import net.sf.ardengine.rpg.multiplayer.INetworkMessage;
-import net.sf.ardengine.rpg.multiplayer.INetworkPlayer;
+import net.sf.ardengine.rpg.multiplayer.*;
 
+import java.io.File;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
@@ -164,5 +162,10 @@ public class UDPLibNetwork implements INetwork {
                 break;
             }
         }
+    }
+
+    @Override
+    public void shareFile(File file, String fileName, INetworkFileListener listener) {
+        networkImpl.shareFile(file, fileName, new UDPLibFileListener(listener));
     }
 }
