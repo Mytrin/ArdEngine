@@ -1,16 +1,17 @@
 package net.sf.ardengine.rpg;
 
+import com.google.gson.JsonParser;
 import net.sf.ardengine.Core;
-import net.sf.ardengine.rpg.multiplayer.INetwork;
-import net.sf.ardengine.rpg.multiplayer.INetworkedNode;
+import net.sf.ardengine.rpg.multiplayer.*;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * Handles game logic.
  */
 abstract class ANetworkCore {
-    /**State update frequency*/
+    /**State update frequency (How many game frames it takes to advance to next state)*/
     public static final int FRAMES_PER_STATE = 3;
 
     private int actualIndex = 0;
@@ -20,12 +21,13 @@ abstract class ANetworkCore {
     protected boolean isStarted = false;
 
     /**Nodes, about which NetworkCore shares information with other NetworkCores*/
-    private HashMap<String, INetworkedNode> synchronizedNodes = new HashMap<>();
+    protected HashMap<String, INetworkedNode> synchronizedNodes = new HashMap<>();
 
     /**Responsible for communicating with other clients*/
     protected final INetwork network;
 
-
+    protected HashMap<String, JsonMessageHandler> handlers = new HashMap<>();
+    protected JsonParser parser = new JsonParser();
 
     /**
      * @param network Responsible for communicating with other clients
@@ -35,12 +37,40 @@ abstract class ANetworkCore {
     }
 
     /**
-     * Updates Server/Client logic
-     * like movement synchronization or pause commands
+     * Processes received messages and starts updateCoreLogic()
      * @param delta Time since last update
      */
-    public void updateState(long delta){
-        updateStateIndex(countPassedFrames(delta));
+    public final void updateState(long delta){
+        int passedFrames = countPassedFrames(delta);
+
+        if(isStarted){
+            updateStateIndex(passedFrames);
+            processReceivedMessages();
+        }
+
+        updateCoreLogic(passedFrames);
+    }
+
+    /**
+     * Updates Server/Client logic
+     * @param passedFrames Frames passed since last update
+     */
+    protected abstract void updateCoreLogic(int passedFrames);
+
+    private void processReceivedMessages(){
+        network.getMessages().forEach((INetworkMessage iNetworkMessage) -> {
+            handle(new JsonMessage(parser, iNetworkMessage));
+        });
+    }
+
+    private void handle(JsonMessage message){
+        JsonMessageHandler handler = handlers.get(message.getType());
+        if(handler != null){
+            handler.handle(message);
+        }else{
+            Logger.getLogger(ANetworkCore.class.getName()).warning(
+                    "Unspecified type of JSONMessage: "+message.getType()+". Message ignored.");
+        }
     }
 
     /**

@@ -13,7 +13,8 @@ public interface INetworkedNode {
         private static final int CLEAR_OFFSET = 50;
 
         private static final String STATE_INDEX = "state-index";
-        private static final String TYPE = "node-state";
+        /**Type of JSON message containing state info*/
+        public static final String TYPE = "node-state";
 
         //states may not arrive in order
         private JsonObject[] storedStates = new JsonObject[STATES_BUFFER_SIZE];
@@ -64,13 +65,14 @@ public interface INetworkedNode {
      */
     public String getID();
 
-    /**Handles received state updates from Server*/
+    /**Handles received state updates from Server (Override for each Node)*/
     public void updateClientState(JsonObject state);
 
     /**Handles standard game logic, which would be at Node.updateLogic() for simple games*/
     public void updateServerState();
 
     /**
+     * if nothing changed, feel free to return null
      * @return Changed properties of this object prepared for sending to ClientNetworkCores
      */
     public JsonObject getJSONState();

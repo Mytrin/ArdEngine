@@ -1,16 +1,12 @@
 package net.sf.ardengine.rpg;
 
-import com.google.gson.JsonObject;
 import net.sf.ardengine.rpg.multiplayer.INetwork;
-import net.sf.ardengine.rpg.multiplayer.INetworkMessage;
-
-import java.util.LinkedList;
-import java.util.List;
+import net.sf.ardengine.rpg.multiplayer.INetworkedNode;
 
 /**
  * Handles server game logic.
  */
-public class AServerCore extends ANetworkCore{
+public abstract class AServerCore extends ANetworkCore{
 
     /**
      * @param network Responsible for communicating with other clients
@@ -19,20 +15,22 @@ public class AServerCore extends ANetworkCore{
         super(network);
     }
 
+//TODO sending states(can be null), current index
+
     @Override
-    public void updateState(long delta) {
-        if(isStarted){
-            processReceivedMessages();
-        }
+    protected final void updateCoreLogic(int passedFrames) {
+        synchronizedNodes.values().forEach((INetworkedNode iNetworkedNode) -> {
+            iNetworkedNode.updateServerState();
+        });
+
+        handleServerLogic(passedFrames);
     }
 
-    private void processReceivedMessages(){
-        /*List<INetworkMessage> messages = new LinkedList<>();
-
-        for(INetworkMessage message : network.getMessages()){
-            message.getMessage()
-        }*/
-    }
-
+    /**
+     * Overridable method for user
+     *
+     * @param passedFrames frames passed since last update
+     */
+    public abstract void handleServerLogic(int passedFrames);
 
 }
