@@ -18,6 +18,10 @@ public class JsonMessage {
     public static final String TARGET_NODE = "node-id";
     /**Inner JSON content of message*/
     public static final String CONTENT = "content";
+    /**Target state index*/
+    public static final String STATE_INDEX = "state-index";
+    /**Time, when message was sent*/
+    public static final String TIMESTAMP = "timestamp";
 
     /**Sent JSON*/
     public final JsonObject json;
@@ -26,12 +30,15 @@ public class JsonMessage {
     /**
      * @param type purpose of this message
      * @param content Sent JSON object
+     * @param targetNode node, about which is state informs
+     * @param serverTime current game time
      */
-    public JsonMessage(String type, JsonObject content, INetworkedNode targetNode) {
+    public JsonMessage(String type, JsonObject content, INetworkedNode targetNode, long serverTime) {
         this.json = new JsonObject();
         this.json.add(CONTENT, content);
         this.json.addProperty(TYPE, type);
         this.json.addProperty(TARGET_NODE, targetNode.getID());
+        this.json.addProperty(TIMESTAMP, serverTime);
         this.sourceMessage = null;
     }
 
@@ -105,6 +112,20 @@ public class JsonMessage {
         if(property != null){
             try{
                 return property.getAsInt();
+            }catch(Exception e){}
+        }
+        return null;
+    }
+
+    /**
+     * @param key property of json
+     * @return specified property value or null, if none or non long
+     */
+    public Long getValueAsLong(String key){
+        JsonPrimitive property = json.getAsJsonPrimitive(key);
+        if(property != null){
+            try{
+                return property.getAsLong();
             }catch(Exception e){}
         }
         return null;

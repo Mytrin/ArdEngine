@@ -10,15 +10,19 @@ import java.util.logging.Logger;
 /**
  * Handles game logic.
  */
-abstract class ANetworkCore {
+public abstract class ANetworkCore {
     /**State update frequency (How many game frames it takes to advance to next state)*/
     public static final int FRAMES_PER_STATE = 3;
 
-    private int actualIndex = 0;
-    private int actualFrame = 0;
+    /**Index of state in NetworkedNode's buffer*/
+    protected int actualIndex = 0;
+    /**progress to new state*/
+    protected int actualFrame = 0;
+    /**true, if actualIndex has been changed this update*/
+    protected boolean changedIndex = false;
 
     /**True, if Core is currently processing*/
-    protected boolean isStarted = false;
+    protected boolean isStarted = true;
 
     /**Nodes, about which NetworkCore shares information with other NetworkCores*/
     protected HashMap<String, INetworkedNode> synchronizedNodes = new HashMap<>();
@@ -46,20 +50,21 @@ abstract class ANetworkCore {
         if(isStarted){
             updateStateIndex(passedFrames);
             processReceivedMessages();
+            updateCoreLogic(delta, passedFrames);
         }
-
-        updateCoreLogic(passedFrames);
     }
 
     /**
      * Updates Server/Client logic
+     * @param delta time passed since last update
      * @param passedFrames Frames passed since last update
      */
-    protected abstract void updateCoreLogic(int passedFrames);
+    protected abstract void updateCoreLogic(long delta, int passedFrames);
 
     private void processReceivedMessages(){
         network.getMessages().forEach((INetworkMessage iNetworkMessage) -> {
-            handle(new JsonMessage(parser, iNetworkMessage));
+            JsonMessage receivedMessage = new JsonMessage(parser, iNetworkMessage);
+            handle(receivedMessage);
         });
     }
 
@@ -99,9 +104,15 @@ abstract class ANetworkCore {
     private void updateStateIndex(int passedFrames){
         actualFrame+=passedFrames;
 
+        if(actualFrame<FRAMES_PER_STATE-1){
+            changedIndex = false;
+            return;
+        }
+
         while(actualFrame>FRAMES_PER_STATE-1){
             actualFrame-=FRAMES_PER_STATE;
             actualIndex++;
+            changedIndex = true;
 
             if(actualIndex==INetworkedNode.StoredStates.STATES_BUFFER_SIZE){
                 actualIndex=0;
@@ -116,4 +127,5 @@ abstract class ANetworkCore {
         float frameLength = 1f/(float)Core.renderer.getDesiredFPS();
         return (int)(delta/frameLength);
     }
+
 }

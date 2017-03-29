@@ -1,6 +1,7 @@
 package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonObject;
+import net.sf.ardengine.rpg.ANetworkCore;
 
 /**
  * Interface for Nodes synchronized by ANetworkCore.
@@ -9,51 +10,81 @@ public interface INetworkedNode {
 
     class StoredStates{
         /**Capacity of state buffer*/
-        public static final int STATES_BUFFER_SIZE = 100;
-        private static final int CLEAR_OFFSET = 50;
+        public static final int STATES_BUFFER_SIZE = 10;
+        private static final int CLEAR_OFFSET = 5;
 
-        private static final String STATE_INDEX = "state-index";
+        public static final int FRAME_INDEFINITE = -1;
+
         /**Type of JSON message containing state info*/
         public static final String TYPE = "node-state";
 
         //states may not arrive in order
         private JsonObject[] storedStates = new JsonObject[STATES_BUFFER_SIZE];
 
+        //How many times we had to use lastState
+        private int fallBackCount = 0;
+        private JsonObject lastState;
+
         private final INetworkedNode targetNode;
 
         /**
          * @param targetNode Node, which states are stored
          */
-        public StoredStates(INetworkedNode targetNode) {
+        StoredStates(INetworkedNode targetNode) {
             this.targetNode = targetNode;
         }
 
         private void receive(JsonMessage message){
-            int stateIndex = message.json.get(STATE_INDEX).getAsInt();
+            int stateIndex = message.json.get(JsonMessage.STATE_INDEX).getAsInt();
             storedStates[stateIndex] = message.json.getAsJsonObject(JsonMessage.CONTENT);
         }
 
-        private void update(int currentStateIndex){
+        private void update(int currentStateIndex, int currentFrame){
             clearOldStates(currentStateIndex);
 
-            if(storedStates[currentStateIndex] != null){
-                targetNode.updateClientState(storedStates[currentStateIndex]);
+            int actualFrame = currentFrame;
+            JsonObject actualState = storedStates[currentStateIndex];
+
+            if(actualState!=null){
+                //Saving for situations, where is actualState missing
+                lastState = actualState;
+                fallBackCount = 0;
+            }else{
+                fallBackCount++;
+                actualState = lastState;
+                actualFrame += ANetworkCore.FRAMES_PER_STATE*fallBackCount;
             }
+
+            updateClientState(actualState, currentStateIndex, actualFrame);
+        }
+
+        private void updateClientState(JsonObject actualState, int actualStateIndex, int actualFrame){
+            if(actualState != null){
+                for(int i=1; i <= 3 ; i++){
+                    JsonObject nextState = storedStates[bufferIndex(actualStateIndex+i)];
+                    if(nextState != null){
+                        targetNode.updateClientState(actualState, nextState, actualFrame, ANetworkCore.FRAMES_PER_STATE*i);
+                        return;
+                    }
+                }
+
+                //No info, keep doing whatever you were doing before
+                targetNode.updateClientState(actualState, null, actualFrame, FRAME_INDEFINITE);
+            } //else there is nothing we can do
         }
 
         private void clearOldStates(int actualIndex){
-            int clearIndex = (actualIndex + CLEAR_OFFSET)%100;
+            int clearIndex = (actualIndex + CLEAR_OFFSET)%STATES_BUFFER_SIZE;
             storedStates[clearIndex] = null;
         }
 
-        /**
-         * @param state JSON state of current Node
-         * @return JSON message prepared for sending to clients,
-         * containing additional necessary information
-         */
-        private JsonMessage createJsonMessage(int currentStateIndex, JsonObject state){
-            JsonMessage message = new JsonMessage(TYPE, state, targetNode);
-            message.json.addProperty(STATE_INDEX, currentStateIndex);
+        private int bufferIndex(int stateIndex){
+            return stateIndex%STATES_BUFFER_SIZE;
+        }
+
+        private JsonMessage createJsonMessage(int currentStateIndex, JsonObject state, long serverTimestamp){
+            JsonMessage message = new JsonMessage(TYPE, state, targetNode, serverTimestamp);
+            message.json.addProperty(JsonMessage.STATE_INDEX, currentStateIndex);
 
             return message;
         }
@@ -63,38 +94,50 @@ public interface INetworkedNode {
     /**
      * @return Unique identification of this Node in Game and Worlds
      */
-    public String getID();
+    String getID();
 
-    /**Handles received state updates from Server (Override for each Node)*/
-    public void updateClientState(JsonObject state);
+    /**
+     * Handles received state updates from Server (Override for each Node)
+     * Method for user, where he can define interpolation between states
+     * @param lastState last known state
+     * @param nextState next known state or null, if unknown
+     * @param actFrame  which frame should method interpolate for.
+     * @param endFrame Frame, when should this node be synchronized with nextState.
+     *                 If nextState is null, endFrame value is FRAME_INDEFINITE.
+     */
+    void updateClientState(JsonObject lastState, JsonObject nextState, int actFrame, int endFrame);
 
     /**Handles standard game logic, which would be at Node.updateLogic() for simple games*/
-    public void updateServerState();
+    void updateServerState();
 
     /**
-     * if nothing changed, feel free to return null
-     * @return Changed properties of this object prepared for sending to ClientNetworkCores
+     * @return Properties of this object prepared for sending to ClientNetworkCores
      */
-    public JsonObject getJSONState();
+    JsonObject getJSONState();
 
     /**
-     * For server
+     * For user, indicator then Server should not send State of this Node, because nothing changed.
+     * Please use carefully for moving objects,
+     * as some clients may not receive info about stopped movement.
      * @return true, if changes made by updateServerState() should be sent to clients by JSON
      */
-    public boolean hasChangedState();
+    default boolean hasChangedState(){
+        return true;
+    }
 
     /**
      * @return Object containing stored JSON states, which were received from server
      */
-    public StoredStates getStoredStates();
+    StoredStates getStoredStates();
 
     /**
      * DO NOT OVERRIDE, USED BY NETWORK CORE
      * to trigger state updates received from server
-     * @param passedFrames Frames passed since last update
+     * @param actualIndex index of current state
+     * @param passedFrames Frames passed since current state
      */
-    default void triggerState(int passedFrames){
-        getStoredStates().update(passedFrames);
+    default void triggerState(int actualIndex, int passedFrames){
+        getStoredStates().update(actualIndex, passedFrames);
     }
 
     /**
@@ -108,11 +151,12 @@ public interface INetworkedNode {
 
     /**
      * DO NOT OVERRIDE, USED BY NETWORK CORE
-     * to prepare update about state fro clients
+     * to prepare update about state from clients
      * @param currentIndex current Server index
+     * @param serverTimestamp server time, at which si message sent
      */
-    default JsonMessage getJsonMessage(int currentIndex){
-       return getStoredStates().createJsonMessage(currentIndex, getJSONState());
+    default JsonMessage getJsonMessage(int currentIndex, long serverTimestamp){
+       return getStoredStates().createJsonMessage(currentIndex, getJSONState(), serverTimestamp);
     }
 
 }
