@@ -1,4 +1,4 @@
-package net.sf.ardengine.rpg.multiplayer;
+package net.sf.ardengine.rpg.multiplayer.network;
 
 /**
  * Defines which information about message from other users should be available for NetworkLogicalCore

@@ -1,8 +1,8 @@
 package net.sf.ardengine.rpg.multiplayer.udplib;
 
 import com.gmail.lepeska.martin.udplib.StoredMessage;
-import net.sf.ardengine.rpg.multiplayer.INetworkMessage;
-import net.sf.ardengine.rpg.multiplayer.INetworkPlayer;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkMessage;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
 /**
  * Layer between ArdEngine GroupUser and UDPLib NetworkPlayer implementation.

@@ -3,6 +3,7 @@ package net.sf.ardengine.rpg;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.IGame;
 import net.sf.ardengine.dialogs.Dialogs;
+import net.sf.ardengine.rpg.multiplayer.ANetworkCore;
 
 /**
  * Game class with set up RPG features.
@@ -10,9 +11,9 @@ import net.sf.ardengine.dialogs.Dialogs;
 public abstract class RPGame implements IGame {
 
     /**Game logic handler*/
-    private ANetworkCore logicalCore;
+    protected ANetworkCore logicalCore;
     /**Dialog loader*/
-    protected Dialogs dialogs = new Dialogs();
+    public final Dialogs dialogs = new Dialogs();
 
     public RPGame(){
 

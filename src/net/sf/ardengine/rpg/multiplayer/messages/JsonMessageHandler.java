@@ -1,4 +1,4 @@
-package net.sf.ardengine.rpg.multiplayer;
+package net.sf.ardengine.rpg.multiplayer.messages;
 
 /**
  * Handler for specific type of incoming JSON Messages,

@@ -1,7 +1,7 @@
 package net.sf.ardengine.rpg.multiplayer.udplib;
 
 import com.gmail.lepeska.martin.udplib.client.GroupUser;
-import net.sf.ardengine.rpg.multiplayer.INetworkPlayer;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
 import java.net.InetAddress;
 

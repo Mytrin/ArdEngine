@@ -1,8 +1,13 @@
-package net.sf.ardengine.rpg;
+package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonParser;
 import net.sf.ardengine.Core;
-import net.sf.ardengine.rpg.multiplayer.*;
+import net.sf.ardengine.rpg.ALevel;
+import net.sf.ardengine.rpg.ALoadingScreen;
+import net.sf.ardengine.rpg.multiplayer.messages.JsonMessage;
+import net.sf.ardengine.rpg.multiplayer.messages.JsonMessageHandler;
+import net.sf.ardengine.rpg.multiplayer.network.INetwork;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkMessage;
 
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -78,29 +83,6 @@ public abstract class ANetworkCore {
         }
     }
 
-    /**
-     * Inserts node into list of nodes, which state is shared with server/clients.
-     * @param node added Node with unique ID
-     */
-    public void addNode(INetworkedNode node){
-        synchronizedNodes.put(node.getID(), node);
-    }
-
-    /**
-     * Removes node from list of nodes, which state is shared with server/clients.
-     * @param node removed Node with unique ID
-     */
-    public void removeNode(INetworkedNode node){
-        synchronizedNodes.remove(node.getID());
-    }
-
-    /**
-     * Starts Core INetwork update/notify process
-     */
-    public void start(){
-        isStarted = true;
-    }
-
     private void updateStateIndex(int passedFrames){
         actualFrame+=passedFrames;
 
@@ -126,6 +108,29 @@ public abstract class ANetworkCore {
     private int countPassedFrames(long delta){
         float frameLength = 1f/(float)Core.renderer.getDesiredFPS();
         return (int)(delta/frameLength);
+    }
+
+    /**
+     * Inserts node into list of nodes, which state is shared with server/clients.
+     * @param node added Node with unique ID
+     */
+    public void addNode(INetworkedNode node){
+        synchronizedNodes.put(node.getID(), node);
+    }
+
+    /**
+     * Removes node from list of nodes, which state is shared with server/clients.
+     * @param node removed Node with unique ID
+     */
+    public void removeNode(INetworkedNode node){
+        synchronizedNodes.remove(node.getID());
+    }
+
+    /**
+     * Starts Core INetwork update/notify process
+     */
+    public void start(){
+        isStarted = true;
     }
 
 }

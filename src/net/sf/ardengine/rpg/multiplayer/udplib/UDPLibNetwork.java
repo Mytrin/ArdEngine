@@ -6,7 +6,7 @@ import com.gmail.lepeska.martin.udplib.client.ClientGroupNetwork;
 import com.gmail.lepeska.martin.udplib.client.GroupUser;
 import com.gmail.lepeska.martin.udplib.server.ServerGroupNetwork;
 import com.gmail.lepeska.martin.udplib.util.ConfigLoader;
-import net.sf.ardengine.rpg.multiplayer.*;
+import net.sf.ardengine.rpg.multiplayer.network.*;
 
 import java.io.File;
 import java.net.UnknownHostException;

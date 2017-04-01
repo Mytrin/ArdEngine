@@ -1,9 +1,11 @@
-package net.sf.ardengine.rpg.multiplayer;
+package net.sf.ardengine.rpg.multiplayer.messages;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkMessage;
+import net.sf.ardengine.rpg.multiplayer.INetworkedNode;
 
 /**
  * Represents universal message, which is sent between NetworkCores
@@ -18,8 +20,6 @@ public class JsonMessage {
     public static final String TARGET_NODE = "node-id";
     /**Inner JSON content of message*/
     public static final String CONTENT = "content";
-    /**Target state index*/
-    public static final String STATE_INDEX = "state-index";
     /**Time, when message was sent*/
     public static final String TIMESTAMP = "timestamp";
 
@@ -31,14 +31,12 @@ public class JsonMessage {
      * @param type purpose of this message
      * @param content Sent JSON object
      * @param targetNode node, about which is state informs
-     * @param serverTime current game time
      */
-    public JsonMessage(String type, JsonObject content, INetworkedNode targetNode, long serverTime) {
+    public JsonMessage(String type, JsonObject content, INetworkedNode targetNode) {
         this.json = new JsonObject();
         this.json.add(CONTENT, content);
         this.json.addProperty(TYPE, type);
         this.json.addProperty(TARGET_NODE, targetNode.getID());
-        this.json.addProperty(TIMESTAMP, serverTime);
         this.sourceMessage = null;
     }
 
@@ -129,5 +127,10 @@ public class JsonMessage {
             }catch(Exception e){}
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return json.toString();
     }
 }

@@ -1,4 +1,4 @@
-package net.sf.ardengine.rpg.multiplayer;
+package net.sf.ardengine.rpg.multiplayer.network;
 
 import java.net.InetAddress;
 

@@ -1,7 +1,8 @@
 package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonObject;
-import net.sf.ardengine.rpg.ANetworkCore;
+import net.sf.ardengine.rpg.multiplayer.messages.DeltaStateMessage;
+import net.sf.ardengine.rpg.multiplayer.messages.JsonMessage;
 
 /**
  * Interface for Nodes synchronized by ANetworkCore.
@@ -14,9 +15,6 @@ public interface INetworkedNode {
         private static final int CLEAR_OFFSET = 5;
 
         public static final int FRAME_INDEFINITE = -1;
-
-        /**Type of JSON message containing state info*/
-        public static final String TYPE = "node-state";
 
         //states may not arrive in order
         private JsonObject[] storedStates = new JsonObject[STATES_BUFFER_SIZE];
@@ -35,7 +33,7 @@ public interface INetworkedNode {
         }
 
         private void receive(JsonMessage message){
-            int stateIndex = message.json.get(JsonMessage.STATE_INDEX).getAsInt();
+            int stateIndex = message.json.get(DeltaStateMessage.STATE_INDEX).getAsInt();
             storedStates[stateIndex] = message.json.getAsJsonObject(JsonMessage.CONTENT);
         }
 
@@ -82,11 +80,8 @@ public interface INetworkedNode {
             return stateIndex%STATES_BUFFER_SIZE;
         }
 
-        private JsonMessage createJsonMessage(int currentStateIndex, JsonObject state, long serverTimestamp){
-            JsonMessage message = new JsonMessage(TYPE, state, targetNode, serverTimestamp);
-            message.json.addProperty(JsonMessage.STATE_INDEX, currentStateIndex);
-
-            return message;
+        private JsonMessage createJsonMessage(int currentStateIndex, long serverTimestamp){
+            return new DeltaStateMessage(targetNode, serverTimestamp, currentStateIndex);
         }
 
     }
@@ -111,7 +106,12 @@ public interface INetworkedNode {
     void updateServerState();
 
     /**
-     * @return Properties of this object prepared for sending to ClientNetworkCores
+     * @return Changed properties of this object prepared for sending to ClientNetworkCores
+     */
+    JsonObject getJSONDeltaState();
+
+    /**
+     * @return Complete info about this object prepared for sending to ClientNetworkCores
      */
     JsonObject getJSONState();
 
@@ -156,7 +156,7 @@ public interface INetworkedNode {
      * @param serverTimestamp server time, at which si message sent
      */
     default JsonMessage getJsonMessage(int currentIndex, long serverTimestamp){
-       return getStoredStates().createJsonMessage(currentIndex, getJSONState(), serverTimestamp);
+       return getStoredStates().createJsonMessage(currentIndex, serverTimestamp);
     }
 
 }

@@ -89,10 +89,23 @@ public class Group extends Node{
      * @param child Node to remove from current ones
      */
     public void removeChild(Node child){
+        removeChild(child, true);
+    }
+
+    /**
+     * Removes given child from group and updates group size
+     * @param child Node to remove from current ones
+     * @param removePermanently true, if renderer should free allocated resources for this child
+     */
+    public void removeChild(Node child, boolean removePermanently){
         if(child == null) return;
 
         children.remove(child);
-        implementation.childRemoved(child);
+
+        if(removePermanently){
+            implementation.childRemoved(child);
+        }
+
         recalculateSize();
     }
 

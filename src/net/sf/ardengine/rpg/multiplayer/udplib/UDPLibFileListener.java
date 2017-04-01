@@ -1,7 +1,7 @@
 package net.sf.ardengine.rpg.multiplayer.udplib;
 
 import com.gmail.lepeska.martin.udplib.files.IFileShareListener;
-import net.sf.ardengine.rpg.multiplayer.INetworkFileListener;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkFileListener;
 
 import java.io.File;
 
