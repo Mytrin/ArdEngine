@@ -2,8 +2,6 @@ package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonParser;
 import net.sf.ardengine.Core;
-import net.sf.ardengine.rpg.ALevel;
-import net.sf.ardengine.rpg.ALoadingScreen;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessage;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessageHandler;
 import net.sf.ardengine.rpg.multiplayer.network.INetwork;

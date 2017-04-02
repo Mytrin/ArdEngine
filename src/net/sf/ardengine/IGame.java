@@ -24,7 +24,19 @@ public interface IGame {
 
     //CORE setters and getters
 
+    /**
+     * Changes active world
+     * @param newWorld new world
+     * @param clean true, if last World recources should be freed
+     */
+    public default void setWorld(World newWorld, boolean clean){
+        Core.setWorld(newWorld, clean);
+    }
 
+    /**
+     * Changes active world and frees resources of last one.
+     * @param newWorld new world
+     */
     public default void setWorld(World newWorld){
         Core.setWorld(newWorld);
     }

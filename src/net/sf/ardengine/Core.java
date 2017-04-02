@@ -378,11 +378,20 @@ public class Core {
 	}
 
     /**
-     * Changes active world
+     * Changes active world and frees resources of last one.
      * @param world new world
      */
     public static void setWorld(World world) {
-        if(Core.world!= null) world.cleanUp();
+        setWorld(world, true);
+    }
+
+    /**
+     * Changes active world
+     * @param world new world
+     * @param clean true, if last World recources should be freed
+     */
+    public static void setWorld(World world, boolean clean) {
+        if(Core.world!= null && clean) Core.world.cleanUp();
 
         Core.world = world;
     }

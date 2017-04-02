@@ -6,6 +6,7 @@ import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Handles server game logic.
@@ -23,6 +24,8 @@ public abstract class AServerCore extends ANetworkCore {
     private final JsonMessageHandler initPlayerHandler = (JsonMessage message) -> {
 
     };
+
+    private final LinkedList<DelayedTask> tasks = new LinkedList<>();
 
     /**
      * Create server core for single player
@@ -54,9 +57,35 @@ public abstract class AServerCore extends ANetworkCore {
             iNetworkedNode.updateServerState()
         );
 
+        executeTasks(delta);
+
         handleServerLogic(passedFrames);
 
         sendNodeStates();
+    }
+
+    private void executeTasks(long delta){
+        List<DelayedTask> finishedTasks = new LinkedList<>();
+        for(DelayedTask task : tasks){
+            if(task.timePassed(delta)){
+                task.execute();
+                finishedTasks.add(task);
+            }
+        }
+        tasks.removeAll(finishedTasks);
+    }
+
+    /**
+     * @param when ms to wait before action.execute()
+     * @param action action to execute in future
+     */
+    public void addDelayedTask(long when, IDelayedAction action){
+        tasks.add(new DelayedTask(when) {
+            @Override
+            protected void execute() {
+                action.execute();
+            }
+        });
     }
 
     /**
@@ -106,5 +135,7 @@ public abstract class AServerCore extends ANetworkCore {
      *                 new ClientReadyMessage().toString());
      */
     protected abstract void prepareClient(INetworkPlayer player);
+
+
 
 }

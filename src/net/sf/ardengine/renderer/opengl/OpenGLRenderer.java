@@ -161,7 +161,7 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
             }
 
         }catch(Throwable e){
-            LOGGER.severe(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
             Core.notifyWhenRendererReady(null, RendererState.FAILED);
         }
 	}

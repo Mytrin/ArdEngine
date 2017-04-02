@@ -92,6 +92,7 @@ public interface INetworkedNode {
     String getID();
 
     /**
+     * AUTOMATICALLY CALLED FROM AServerCore
      * Handles received state updates from Server (Override for each Node)
      * Method for user, where he can define interpolation between states
      * @param lastState last known state
@@ -102,20 +103,26 @@ public interface INetworkedNode {
      */
     void updateClientState(JsonObject lastState, JsonObject nextState, int actFrame, int endFrame);
 
-    /**Handles standard game logic, which would be at Node.updateLogic() for simple games*/
+    /**
+     * AUTOMATICALLY CALLED FROM AServerCore
+     * Handles standard game logic, which would be at Node.updateLogic() for simple games
+     * */
     void updateServerState();
 
     /**
+     * AUTOMATICALLY CALLED FROM AServerCore
      * @return Changed properties of this object prepared for sending to ClientNetworkCores
      */
     JsonObject getJSONDeltaState();
 
     /**
+     * AUTOMATICALLY CALLED FROM AServerCore
      * @return Complete info about this object prepared for sending to ClientNetworkCores
      */
     JsonObject getJSONState();
 
     /**
+     * AUTOMATICALLY CALLED FROM AServerCore
      * For user, indicator then Server should not send State of this Node, because nothing changed.
      * Please use carefully for moving objects,
      * as some clients may not receive info about stopped movement.
@@ -126,6 +133,7 @@ public interface INetworkedNode {
     }
 
     /**
+     * AUTOMATICALLY CALLED FROM AServerCore
      * @return Object containing stored JSON states, which were received from server
      */
     StoredStates getStoredStates();
