@@ -24,8 +24,6 @@ public abstract class AServerCore extends ANetworkCore {
         prepareClient(message.sourceMessage.getSender());
     };
 
-    private final LinkedList<DelayedTask> tasks = new LinkedList<>();
-
     /**
      * Create server core for single player
      * @param playerName name of player
@@ -56,35 +54,9 @@ public abstract class AServerCore extends ANetworkCore {
             iNetworkedNode.updateServerState()
         );
 
-        executeTasks(delta);
-
         handleServerLogic(passedFrames);
 
         sendNodeStates();
-    }
-
-    private void executeTasks(long delta){
-        List<DelayedTask> finishedTasks = new LinkedList<>();
-        for(DelayedTask task : tasks){
-            if(task.timePassed(delta)){
-                task.execute();
-                finishedTasks.add(task);
-            }
-        }
-        tasks.removeAll(finishedTasks);
-    }
-
-    /**
-     * @param when ms to wait before action.execute()
-     * @param action action to execute in future
-     */
-    public void addDelayedTask(long when, IDelayedAction action){
-        tasks.add(new DelayedTask(when) {
-            @Override
-            protected void execute() {
-                action.execute();
-            }
-        });
     }
 
     /**

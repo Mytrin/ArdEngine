@@ -12,6 +12,8 @@ import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -36,6 +38,8 @@ public abstract class ANetworkCore {
 
     /**Responsible for communicating with other clients*/
     protected final INetwork network;
+
+    private final LinkedList<DelayedTask> tasks = new LinkedList<>();
 
     protected final HashMap<String, JsonMessageHandler> handlers = new HashMap<>();
     protected JsonParser parser = new JsonParser();
@@ -90,6 +94,7 @@ public abstract class ANetworkCore {
         if(isStarted){
             updateStateIndex(passedFrames);
             processReceivedMessages();
+            executeTasks(delta);
             updateCoreLogic(delta, passedFrames);
         }
     }
@@ -168,4 +173,27 @@ public abstract class ANetworkCore {
         isStarted = true;
     }
 
+    private void executeTasks(long delta){
+        List<DelayedTask> finishedTasks = new LinkedList<>();
+        for(DelayedTask task : tasks){
+            if(task.timePassed(delta)){
+                task.execute();
+                finishedTasks.add(task);
+            }
+        }
+        tasks.removeAll(finishedTasks);
+    }
+
+    /**
+     * @param when ms to wait before action.execute()
+     * @param action action to execute in future
+     */
+    public void addDelayedTask(long when, IDelayedAction action){
+        tasks.add(new DelayedTask(when) {
+            @Override
+            protected void execute() {
+                action.execute();
+            }
+        });
+    }
 }
