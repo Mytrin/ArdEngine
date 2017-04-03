@@ -2,11 +2,15 @@ package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonParser;
 import net.sf.ardengine.Core;
+import net.sf.ardengine.io.console.ConsoleUI;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessage;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessageHandler;
 import net.sf.ardengine.rpg.multiplayer.network.INetwork;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkListener;
 import net.sf.ardengine.rpg.multiplayer.network.INetworkMessage;
+import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -28,19 +32,52 @@ public abstract class ANetworkCore {
     protected boolean isStarted = true;
 
     /**Nodes, about which NetworkCore shares information with other NetworkCores*/
-    protected HashMap<String, INetworkedNode> synchronizedNodes = new HashMap<>();
+    protected final HashMap<String, INetworkedNode> synchronizedNodes = new HashMap<>();
 
     /**Responsible for communicating with other clients*/
     protected final INetwork network;
 
-    protected HashMap<String, JsonMessageHandler> handlers = new HashMap<>();
+    protected final HashMap<String, JsonMessageHandler> handlers = new HashMap<>();
     protected JsonParser parser = new JsonParser();
+
+    protected final HashMap<String, File> receivedFiles = new HashMap<>();
+    private final INetworkListener coreListener = new INetworkListener() {
+        @Override
+        public void joined(INetworkPlayer me) {
+            ConsoleUI.print("Joined network as "+me.getIP());
+        }
+
+        @Override
+        public void userKicked(INetworkPlayer who) {
+            ConsoleUI.print("User disconnected "+who.getName());
+        }
+
+        @Override
+        public void userJoined(INetworkPlayer who) {
+            ConsoleUI.print("User joined "+who.getName());
+        }
+
+        @Override
+        public void mesageReceived() {}
+
+        @Override
+        public void kicked() {
+            ConsoleUI.print("Kicked from network!");
+        }
+
+        @Override
+        public void fileReceived(String fileID, File file) {
+            ConsoleUI.print("Received file "+fileID);
+            receivedFiles.put(fileID, file);
+        }
+    };
 
     /**
      * @param network Responsible for communicating with other clients
      */
     protected ANetworkCore(INetwork network) {
         this.network = network;
+        this.network.addListener(coreListener);
     }
 
     /**

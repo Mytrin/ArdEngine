@@ -46,8 +46,8 @@ public class UDPLibNetworkListener implements IGroupListener{
     }
 
     @Override
-    public void fileReceived(File file) {
-        gameListener.fileReceived(file);
+    public void fileReceived(String fileID, File file) {
+        gameListener.fileReceived(fileID, file);
     }
 
     @Override

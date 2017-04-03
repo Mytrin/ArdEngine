@@ -37,8 +37,9 @@ public interface INetworkListener {
 
     /**
      * Called when file has been shared from network
+     * @param fileID name of file
      * @param file received file
      */
-    public void fileReceived(File file);
+    public void fileReceived(String fileID, File file);
 
 }
