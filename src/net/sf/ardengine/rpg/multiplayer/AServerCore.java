@@ -6,7 +6,6 @@ import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Handles server game logic.
@@ -22,7 +21,7 @@ public abstract class AServerCore extends ANetworkCore {
     };
 
     private final JsonMessageHandler initPlayerHandler = (JsonMessage message) -> {
-
+        prepareClient(message.sourceMessage.getSender());
     };
 
     private final LinkedList<DelayedTask> tasks = new LinkedList<>();

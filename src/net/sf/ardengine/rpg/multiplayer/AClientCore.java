@@ -27,7 +27,7 @@ public abstract class AClientCore extends ANetworkCore {
     };
 
     private final JsonMessageHandler joinFinished = (JsonMessage message) -> {
-
+        startPlaying();
     };
 
     private final JsonMessageHandler deltaStateHandler = (JsonMessage message) -> {
@@ -39,7 +39,7 @@ public abstract class AClientCore extends ANetworkCore {
 
     private final JsonMessageHandler stateHandler = (JsonMessage message) -> {
         INetworkedNode node = reconstructFromState(message.getContent());
-        if(!synchronizedNodes.containsKey(node.getID())){
+        if(node!= null && !synchronizedNodes.containsKey(node.getID())){
             addNode(node);
         }
     };
@@ -59,7 +59,7 @@ public abstract class AClientCore extends ANetworkCore {
         network.sendBroadcastMessage(new JoinRequestMessage().toString());
         handlers.put(JoinResponseMessage.TYPE, joinHandler);
         handlers.put(StateMessage.TYPE, stateHandler);
-        handlers.put(ClientReadyMessage.TYPE ,joinFinished);
+        handlers.put(ClientReadyMessage.TYPE, joinFinished);
     }
 
     /**
@@ -70,6 +70,12 @@ public abstract class AClientCore extends ANetworkCore {
      *  network.sendBroadcastMessage(new ClientPreparedMessage().toString());
      */
     protected abstract void prepareClient();
+
+    /**
+     * Automatically called when server sends signal,
+     * that client is synchronized.
+     */
+    protected abstract void startPlaying();
 
     @Override
     protected final void updateCoreLogic(long delta, int passedFrames) {
