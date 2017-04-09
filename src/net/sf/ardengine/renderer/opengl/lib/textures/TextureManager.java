@@ -17,12 +17,10 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.nio.file.FileSystemNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.ardengine.io.Util;
+import net.sf.ardengine.logging.Util;
 
 import net.sf.ardengine.renderer.opengl.lib.text.STBFont;
 import org.lwjgl.BufferUtils;

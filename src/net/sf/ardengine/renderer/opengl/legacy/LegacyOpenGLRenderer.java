@@ -30,7 +30,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class LegacyOpenGLRenderer extends OpenGLRenderer{
 	
 		private static final int GL_MAJOR_VERSION = 1;
-		private static final int GL_MINOR_VERSION = 4;
+		private static final int GL_MINOR_VERSION = 3;
 	
 		public LegacyOpenGLRenderer(int width, int height) {
 			super(width, height);

@@ -25,8 +25,8 @@ public class SpriteSheetCalc {
     public SpriteSheetCalc(ASprite parentSprite, float sheetWidth, float sheetHeight) {
         partWidth = parentSprite.getWidth();
         partHeight = parentSprite.getHeight();
-        cols = (int)Math.ceil(sheetWidth/partWidth);
-        rows = (int)Math.ceil(sheetHeight/partHeight);
+        cols = Math.max((int)Math.ceil(sheetWidth/partWidth), 1);
+        rows = Math.max((int)Math.ceil(sheetHeight/partHeight), 1);
 
         rowUV = 1f/rows;
         colUV = 1f/cols;

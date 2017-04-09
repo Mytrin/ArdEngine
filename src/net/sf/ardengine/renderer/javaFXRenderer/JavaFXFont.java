@@ -46,6 +46,7 @@ public class JavaFXFont implements IFont{
 
     @Override
     public int getFontHeight() {
+       if(fxFont == null) return -1;
         return (int)Math.ceil(fxFont.getSize());
     }
 

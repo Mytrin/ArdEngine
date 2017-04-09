@@ -1,6 +1,6 @@
-package net.sf.ardengine.io;
+package net.sf.ardengine.logging;
 
-import net.sf.ardengine.io.console.ConsoleUI;
+import net.sf.ardengine.input.console.ConsoleUI;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

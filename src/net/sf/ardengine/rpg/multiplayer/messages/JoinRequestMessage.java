@@ -6,10 +6,10 @@ package net.sf.ardengine.rpg.multiplayer.messages;
 public class JoinRequestMessage extends JsonMessage{
 
     /**Type of message sent automatically by client to synchronize with game.*/
-    public static final String JOIN_REQUEST_TYPE = "player-join-request";
+    public static final String TYPE = "player-join-request";
 
     public JoinRequestMessage(){
-        super(JOIN_REQUEST_TYPE, null, null);
+        super(TYPE, null, null);
     }
 
 }

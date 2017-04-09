@@ -1,8 +1,8 @@
-package net.sf.ardengine.io.console;
+package net.sf.ardengine.input.console;
 
 import net.sf.ardengine.Core;
-import net.sf.ardengine.io.Config;
-import net.sf.ardengine.io.SevereFormatter;
+import net.sf.ardengine.logging.Config;
+import net.sf.ardengine.logging.SevereFormatter;
 
 import java.io.File;
 

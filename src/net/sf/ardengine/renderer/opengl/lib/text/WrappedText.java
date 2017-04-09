@@ -24,7 +24,7 @@ import static org.lwjgl.stb.STBTruetype.stbtt_GetPackedQuad;
  * 3) Split too large words by inserting \n
  * 4) Create new text String, sum spaces between words
  *
- * TODO space sensitive split
+ * TODO space sensitive split, clean this up
  */
 public class WrappedText {
 
@@ -74,7 +74,7 @@ public class WrappedText {
 
                 if(start){
                     //STB counts coords from different corner
-                    yOffset=-quad.y0() +1; //magic number for filtering
+                    yOffset=-quad.y0() +1; //magic number for filtering to prevent texture cut
                     start = false;
                 }
 

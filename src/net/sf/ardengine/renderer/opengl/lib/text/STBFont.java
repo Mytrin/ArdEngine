@@ -1,8 +1,8 @@
 package net.sf.ardengine.renderer.opengl.lib.text;
 
 import net.sf.ardengine.Core;
-import net.sf.ardengine.io.Config;
-import net.sf.ardengine.io.Util;
+import net.sf.ardengine.logging.Config;
+import net.sf.ardengine.logging.Util;
 import net.sf.ardengine.renderer.opengl.OpenGLRenderer;
 import net.sf.ardengine.renderer.opengl.lib.textures.TextureManager;
 import net.sf.ardengine.text.IFont;

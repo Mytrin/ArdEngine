@@ -35,10 +35,10 @@ class TestGame implements IGame{
         pngTest.setZ(10);*/
 
         //SpriteSheet test
-        SpriteSheet spriteSheet = new SpriteSheet("test/spritesheet4.png", 100, 50);
+        /*SpriteSheet spriteSheet = new SpriteSheet("test/spritesheet4.png", 100, 50);
         spriteSheet.setX(200);
         spriteSheet.setY(300);
-        addDrawable(spriteSheet);
+        addDrawable(spriteSheet);*/
 
         //Text test
 		/*Text test = new Text("Lorem Ipsum\n" +

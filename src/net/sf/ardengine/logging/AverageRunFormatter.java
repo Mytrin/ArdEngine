@@ -1,4 +1,4 @@
-package net.sf.ardengine.io;
+package net.sf.ardengine.logging;
 
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;

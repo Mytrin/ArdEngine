@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Simple class responsible fro initializing Paulscode soundsystem.
+ * Simple class responsible for initializing Paulscode soundsystem.
  */
 public class SoundManager {
 
@@ -33,7 +33,7 @@ public class SoundManager {
             //Plugins
             SoundSystemConfig.setCodec( "wav", CodecWav.class );
             SoundSystemConfig.setCodec( "ogg", CodecJOgg.class );
-            SoundSystemConfig.setCodec( "s2m", CodecIBXM.class );
+            SoundSystemConfig.setCodec( "s3m", CodecIBXM.class );
             SoundSystemConfig.setCodec( "mod", CodecIBXM.class );
             SoundSystemConfig.setCodec( "xm", CodecIBXM.class );
 

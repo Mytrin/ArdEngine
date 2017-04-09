@@ -2,7 +2,7 @@ package net.sf.ardengine.rpg.multiplayer;
 
 import com.google.gson.JsonParser;
 import net.sf.ardengine.Core;
-import net.sf.ardengine.io.console.ConsoleUI;
+import net.sf.ardengine.input.console.ConsoleUI;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessage;
 import net.sf.ardengine.rpg.multiplayer.messages.JsonMessageHandler;
 import net.sf.ardengine.rpg.multiplayer.network.INetwork;
@@ -118,6 +118,9 @@ public abstract class ANetworkCore {
         if(handler != null){
             handler.handle(message);
         }else{
+            System.out.println("Loaded:");
+            handlers.keySet().stream().forEach((String key)-> System.out.println(key));
+
             Logger.getLogger(ANetworkCore.class.getName()).warning(
                     "Unspecified type of JSONMessage: "+message.getType()+". Message ignored.");
         }

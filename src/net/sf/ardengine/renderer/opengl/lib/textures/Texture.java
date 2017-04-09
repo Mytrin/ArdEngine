@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.nio.ByteBuffer;
 
-import net.sf.ardengine.io.Config;
+import net.sf.ardengine.logging.Config;
 import org.lwjgl.opengl.GL12;
 
 

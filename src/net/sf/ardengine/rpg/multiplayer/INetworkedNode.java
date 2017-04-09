@@ -34,7 +34,7 @@ public interface INetworkedNode {
 
         private void receive(JsonMessage message){
             int stateIndex = message.json.get(DeltaStateMessage.STATE_INDEX).getAsInt();
-            storedStates[stateIndex] = message.json.getAsJsonObject(JsonMessage.CONTENT);
+            storedStates[stateIndex] = message.getContent();
         }
 
         private void update(int currentStateIndex, int currentFrame){

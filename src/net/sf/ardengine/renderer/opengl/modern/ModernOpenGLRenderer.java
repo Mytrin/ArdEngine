@@ -9,7 +9,6 @@ import net.sf.ardengine.Group;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.SpriteSheet;
 import net.sf.ardengine.collisions.CollisionShape;
-import net.sf.ardengine.io.Config;
 import net.sf.ardengine.renderer.ISpriteSheetImpl;
 import net.sf.ardengine.renderer.opengl.modern.shapes.ModernOpenGLCircleImpl;
 import net.sf.ardengine.renderer.opengl.modern.shapes.ModernOpenGLLineImpl;

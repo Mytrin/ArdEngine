@@ -1,4 +1,4 @@
-package net.sf.ardengine.io.console;
+package net.sf.ardengine.input.console;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.Group;
 import net.sf.ardengine.IDrawable;
-import net.sf.ardengine.io.Config;
+import net.sf.ardengine.logging.Config;
 import net.sf.ardengine.renderer.opengl.legacy.LegacyOpenGLRenderer;
 import net.sf.ardengine.renderer.opengl.lib.GLUtils;
 import net.sf.ardengine.renderer.opengl.lib.text.STBFont;

@@ -13,13 +13,13 @@ import net.sf.ardengine.rpg.multiplayer.INetworkedNode;
 public class JsonMessage {
 
     /**Type property of JSON message*/
-    public static final String TYPE = "type";
+    public static final String TYPE_ATTR = "type";
     /**Type of Unknown JSON message*/
     public static final String UNKNOWN_TYPE = "not-json";
     /**Unique identification of Node in Game and Worlds*/
-    public static final String TARGET_NODE = "node-id";
+    public static final String TARGET_NODE_ATTR = "node-id";
     /**Inner JSON content of message*/
-    public static final String CONTENT = "content";
+    public static final String CONTENT_ATTR = "content";
     /**Time, when message was sent*/
     public static final String TIMESTAMP = "timestamp";
 
@@ -34,9 +34,9 @@ public class JsonMessage {
      */
     public JsonMessage(String type, JsonObject content, INetworkedNode targetNode) {
         this.json = new JsonObject();
-        this.json.add(CONTENT, content);
-        this.json.addProperty(TYPE, type);
-        this.json.addProperty(TARGET_NODE, targetNode.getID());
+        this.json.add(CONTENT_ATTR, content);
+        this.json.addProperty(TYPE_ATTR, type);
+        this.json.addProperty(TARGET_NODE_ATTR, (targetNode!=null?targetNode.getID():null));
         this.sourceMessage = null;
     }
 
@@ -56,8 +56,8 @@ public class JsonMessage {
             jsonObject = new JsonParser().parse(message.getMessage()).getAsJsonObject();
         }catch (Exception e){
             jsonObject = new JsonObject();
-            jsonObject.addProperty(CONTENT, message.getMessage());
-            jsonObject.addProperty(TYPE, UNKNOWN_TYPE);
+            jsonObject.addProperty(CONTENT_ATTR, message.getMessage());
+            jsonObject.addProperty(TYPE_ATTR, UNKNOWN_TYPE);
         }
         return jsonObject;
     }
@@ -66,21 +66,21 @@ public class JsonMessage {
      * @return purpose of this message
      */
     public String getType() {
-        return getValueAsString(TYPE);
+        return getValueAsString(TYPE_ATTR);
     }
 
     /**
      * @return id of target node or null, if none
      */
     public String getTargetNodeID() {
-        return getValueAsString(TARGET_NODE);
+        return getValueAsString(TARGET_NODE_ATTR);
     }
 
     /**
      * @return Inner JSON of this message
      */
     public JsonObject getContent() {
-        JsonElement content = json.get(CONTENT);
+        JsonElement content = json.get(CONTENT_ATTR);
 
         if(content != null){
             return content.getAsJsonObject();
