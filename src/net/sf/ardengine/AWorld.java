@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * World serves as container for nodes and sprites, which should be loaded
+ * AWorld serves as container for nodes and sprites, which should be loaded
  * and maintained only after fulfilling some condition(Menu - Start new game).
  */
-public abstract class World {
-    /**World drawables*/
+public abstract class AWorld {
+    /**AWorld drawables*/
     List<IDrawable> drawables = new LinkedList<>();
     protected List<IDrawable> drawablesRemoveList = Collections.synchronizedList(new LinkedList<>());
     protected List<IDrawable> drawablesAddingList = Collections.synchronizedList(new LinkedList<>());
@@ -48,7 +48,7 @@ public abstract class World {
     }
 
     /**
-     * Inserts Drawables to World
+     * Inserts Drawables to AWorld
      * @param drawables New drawables to display
      */
     public void addDrawables(List<IDrawable> drawables){
@@ -56,7 +56,7 @@ public abstract class World {
     }
 
     /**
-     * Inserts Drawable to World
+     * Inserts Drawable to AWorld
      * @param drawable New drawable to display
      */
     public void addDrawable(IDrawable drawable){

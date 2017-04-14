@@ -6,10 +6,10 @@ import net.sf.ardengine.input.InputManager;
 import net.sf.ardengine.logging.ArdLogger;
 import net.sf.ardengine.logging.Config;
 import net.sf.ardengine.input.console.ConsoleUI;
+import net.sf.ardengine.renderer.Renderers;
 import net.sf.ardengine.renderer.javaFXRenderer.JavaFXRenderer;
 import net.sf.ardengine.renderer.opengl.OpenGLRenderer;
 import net.sf.ardengine.renderer.IRenderer;
-import net.sf.ardengine.renderer.Renderer;
 import net.sf.ardengine.renderer.RendererState;
 import net.sf.ardengine.renderer.opengl.lib.text.STBFont;
 import net.sf.ardengine.sound.SoundManager;
@@ -45,13 +45,13 @@ public class Core {
     /**True, if game currently runs in debugging mode*/
     public static boolean debugMode = false;
 
-	/**Renderer for content managing and drawing.*/
+	/**Renderers for content managing and drawing.*/
 	public static IRenderer renderer;
 
     /**Game class*/
     public static IGame game;
     /**Active game world*/
-    private static World world;
+    private static AWorld world;
 
 	/**Global X translation for all object with non static coords*/
     public static float cameraX = 0;
@@ -80,7 +80,7 @@ public class Core {
     * @param game Game main class
     */
 	public static final void start(IGame game){
-        start(game, Renderer.DONT_CARE);
+        start(game, Renderers.DONT_CARE);
 	}
 	
    /**
@@ -88,7 +88,7 @@ public class Core {
     * @param chosenRenderer - Render used for rendering
     * @param game Game main class
     */
-	public static final void start(IGame game, Renderer chosenRenderer){
+	public static final void start(IGame game, Renderers chosenRenderer){
         Core.game = game;
 
         Config.loadDefaultConfig();
@@ -98,9 +98,9 @@ public class Core {
 		
 		switch(chosenRenderer){
 			case JAVAFX: JavaFXRenderer.createRenderer(800, 600); break;
-			case GL: OpenGLRenderer.setupRenderer(Renderer.GL, 800, 600); break;
-			case LEGACY_GL: OpenGLRenderer.setupRenderer(Renderer.LEGACY_GL, 800, 600); break;
-			case DONT_CARE: OpenGLRenderer.setupRenderer(Renderer.GL, 800, 600); break;
+			case GL: OpenGLRenderer.setupRenderer(Renderers.GL, 800, 600); break;
+			case LEGACY_GL: OpenGLRenderer.setupRenderer(Renderers.LEGACY_GL, 800, 600); break;
+			case DONT_CARE: OpenGLRenderer.setupRenderer(Renderers.GL, 800, 600); break;
 			default: JavaFXRenderer.createRenderer(800, 600); break;
 		}
 
@@ -145,7 +145,7 @@ public class Core {
 
         ConsoleUI.init();
 
-        SoundManager.init((renderer instanceof OpenGLRenderer)?Renderer.GL:Renderer.JAVAFX);
+        SoundManager.init((renderer instanceof OpenGLRenderer)? Renderers.GL: Renderers.JAVAFX);
 
         removeDrawable(background);
         game.gameInit();
@@ -167,9 +167,9 @@ public class Core {
 
                 updateCollisions();
 
-                nodes.forEach(((node)->node.updateLogic()));
-
                 AnimationManager.animate();
+
+                nodes.forEach(((node)->node.updateLogic()));
 
                 game.gameRun();
                 if(world != null) world.run();
@@ -292,7 +292,7 @@ public class Core {
      * Automatically called by node, when its Z has been changed
      * @param drawable node with changed Z
      */
-    public static void childrenZChanged(IDrawable drawable){
+    static void childrenZChanged(IDrawable drawable){
         if(!drawables.remove(drawable)){
             //Great, Z was changed before children got to drawables list,
             //so none extra calculations required
@@ -381,16 +381,16 @@ public class Core {
      * Changes active world and frees resources of last one.
      * @param world new world
      */
-    public static void setWorld(World world) {
+    public static void setWorld(AWorld world) {
         setWorld(world, true);
     }
 
     /**
      * Changes active world
      * @param world new world
-     * @param clean true, if last World recources should be freed
+     * @param clean true, if last AWorld recources should be freed
      */
-    public static void setWorld(World world, boolean clean) {
+    public static void setWorld(AWorld world, boolean clean) {
         if(Core.world!= null && clean) Core.world.cleanUp();
 
         Core.world = world;
@@ -399,14 +399,14 @@ public class Core {
     /**
      * @return Active world
      */
-    public static World getWorld() {
+    public static AWorld getWorld() {
         return world;
     }
 
     public static void main(String[] args) {
-		//start(new TestGame(), Renderer.GL);
-        //start(new TestGame(), Renderer.LEGACY_GL);
-		//start(new TestGame(), Renderer.JAVAFX);
-        start(new TestGame(), Renderer.DONT_CARE);
+		//start(new TestGame(), Renderers.GL);
+        //start(new TestGame(), Renderers.LEGACY_GL);
+		//start(new TestGame(), Renderers.JAVAFX);
+        start(new TestGame(), Renderers.DONT_CARE);
 	}
 }

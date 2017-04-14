@@ -5,12 +5,12 @@ import net.sf.ardengine.Node;
 import net.sf.ardengine.renderer.util.IRenderableCollision;
 
 /**
- * Basic CollisionShape class uniting all methods, which collision shapes should
+ * Basic ACollisionShape class uniting all methods, which collision shapes should
  * have.
  * 
  * @author mytrin
  */
-public abstract class CollisionShape implements IRenderableCollision {
+public abstract class ACollisionShape implements IRenderableCollision {
 	/** Indicator if auto detect node scale */
 	protected boolean withScale = false;
 	/** Variable, where is stored actual node scale */
@@ -20,10 +20,10 @@ public abstract class CollisionShape implements IRenderableCollision {
 	 * @param cs target shape which may collide
 	 * @return true if both this and target shape share space
 	 */
-	public abstract boolean isColliding(CollisionShape cs);
+	public abstract boolean isColliding(ACollisionShape cs);
 
 	/**
-	 * @param e Node, for which is represented by this CollisionShape
+	 * @param e Node, for which is represented by this ACollisionShape
 	 * Updates shape's coords based on node's coords(called automatically by
 	 * Node).
 	 */

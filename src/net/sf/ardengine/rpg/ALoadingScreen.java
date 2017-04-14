@@ -1,11 +1,11 @@
 package net.sf.ardengine.rpg;
 
-import net.sf.ardengine.World;
+import net.sf.ardengine.AWorld;
 
 /**
- * LoadingScreen is World rendered by Game when it is loading new Level.
+ * LoadingScreen is AWorld rendered by Game when it is loading new Level.
  */
-public abstract class ALoadingScreen extends World {
+public abstract class ALoadingScreen extends AWorld {
 
     /**
      * Called after Core starts loading level and adds this world to Game.

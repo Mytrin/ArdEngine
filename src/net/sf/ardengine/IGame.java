@@ -27,9 +27,9 @@ public interface IGame {
     /**
      * Changes active world
      * @param newWorld new world
-     * @param clean true, if last World recources should be freed
+     * @param clean true, if last AWorld recources should be freed
      */
-    public default void setWorld(World newWorld, boolean clean){
+    public default void setWorld(AWorld newWorld, boolean clean){
         Core.setWorld(newWorld, clean);
     }
 
@@ -37,11 +37,11 @@ public interface IGame {
      * Changes active world and frees resources of last one.
      * @param newWorld new world
      */
-    public default void setWorld(World newWorld){
+    public default void setWorld(AWorld newWorld){
         Core.setWorld(newWorld);
     }
 
-    public default World getWorld(){
+    public default AWorld getWorld(){
         return Core.getWorld();
     }
 
@@ -100,6 +100,9 @@ public interface IGame {
 
     //UTILITY METHODS
 
+    /**
+     * @return Sprite renderer as backgroun, when loading a game
+     */
     public default Sprite getInitBackground(){
         return new Sprite(Core.class.getClassLoader().getResourceAsStream("net/sf/ardengine/res/ard_bg.png"));
     }

@@ -8,7 +8,7 @@ import net.sf.ardengine.Group;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.Sprite;
 import net.sf.ardengine.SpriteSheet;
-import net.sf.ardengine.collisions.CollisionShape;
+import net.sf.ardengine.collisions.ACollisionShape;
 import net.sf.ardengine.renderer.ISpriteSheetImpl;
 import net.sf.ardengine.renderer.opengl.OpenGLRenderer;
 import net.sf.ardengine.renderer.opengl.legacy.shapes.LegacyOpenGLCircleImpl;
@@ -17,8 +17,6 @@ import net.sf.ardengine.renderer.opengl.legacy.shapes.LegacyOpenGLPolygonImpl;
 import net.sf.ardengine.renderer.opengl.legacy.shapes.LegacyOpenGLRectangleImpl;
 import net.sf.ardengine.renderer.ISpriteImpl;
 import net.sf.ardengine.renderer.opengl.legacy.util.LegacyCollisionRenderer;
-import net.sf.ardengine.renderer.opengl.modern.ModernOpenGLSpriteImpl;
-import net.sf.ardengine.renderer.opengl.modern.ModernOpenGLSpriteSheetImpl;
 import net.sf.ardengine.renderer.util.IRenderableCollision;
 import net.sf.ardengine.shapes.*;
 import net.sf.ardengine.text.IFont;
@@ -117,7 +115,7 @@ public class LegacyOpenGLRenderer extends OpenGLRenderer{
                 IRenderableCollision rc = collideable.getPrivateArea();
                 LegacyCollisionRenderer.drawLines(rc.getLineCoordinates(), rc.getLineColor());
 
-                for(CollisionShape shape :collideable.getCollisions()){
+                for(ACollisionShape shape :collideable.getCollisions()){
                     LegacyCollisionRenderer.drawLines(shape.getLineCoordinates(), shape.getLineColor());
                 }
 

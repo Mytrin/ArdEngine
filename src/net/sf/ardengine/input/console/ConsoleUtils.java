@@ -40,11 +40,17 @@ public class ConsoleUtils {
         statsModule.addCommand("nodes", (arguments) -> {
                 ConsoleUI.print("Current game nodes: "+ Core.getNodeCount());
         });
+        statsModule.addCommand("fps", (arguments) -> {
+            ConsoleUI.print("Current FPS: "+ Core.renderer.getAverageFPS());
+        });
         statsModule.addCommand("overview", (arguments) -> {
                 ConsoleUI.print("Current game drawables: "+ Core.getDrawableCount()+" of which "+ Core.getNodeCount()+" are nodes.");
         });
         statsModule.addCommand("version", (arguments) -> {
             ConsoleUI.print("Current ArdEngine version: "+ Core.VERSION+(Core.DEBUG?" DEBUG release":""));
+        });
+        statsModule.addCommand("renderer", (arguments) -> {
+            ConsoleUI.print("Used IRenderer implementation: "+ Core.renderer.getClass().getSimpleName());
         });
         //CONFIG
         configModule.addCommand("load", (arguments) -> {

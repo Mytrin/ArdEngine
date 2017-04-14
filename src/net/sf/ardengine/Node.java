@@ -1,7 +1,7 @@
 package net.sf.ardengine;
 
 import javafx.scene.paint.Color;
-import net.sf.ardengine.collisions.CollisionShape;
+import net.sf.ardengine.collisions.ACollisionShape;
 import net.sf.ardengine.collisions.PrivateAreaRect;
 import net.sf.ardengine.events.CollisionEvent;
 import net.sf.ardengine.events.EventType;
@@ -34,12 +34,12 @@ public abstract class Node implements IDrawable{
     protected float layoutOffsetX = 0;
     protected float layoutOffsetY = 0;
 
-   /**Opacity of this Node, if it's possible */
-   protected float opacity=1.0f;
-   /**Scale of this Node, if it's possible*/
-   protected float scale=1.0f;
-   /**Rotation of this Node, if it's possible */
-   protected float angle=0f;
+    /**Opacity of this Node, if it's possible */
+    protected float opacity=1.0f;
+    /**Scale of this Node, if it's possible*/
+    protected float scale=1.0f;
+    /**Rotation of this Node, if it's possible */
+    protected float angle=0f;
 	/**Color or fill, if it's possible*/
 	protected Color color = Color.BLACK;
 
@@ -53,13 +53,16 @@ public abstract class Node implements IDrawable{
     /**Object with info about mouse state */
     private NodeMouseState mouseState = new NodeMouseState();
     /**List of collisions for this node*/
-    protected LinkedList<CollisionShape> collisions = new LinkedList<>();
+    protected LinkedList<ACollisionShape> collisions = new LinkedList<>();
     /**Decides, if collision is possible*/
     protected PrivateAreaRect privateArea;
 
-
+    /**Actions scheduled for next frame*/
 	protected List<DelayedAction> delayedActions = new LinkedList<>();
     protected boolean hasDelayedActions = false;
+
+    /**Types of this Node(is it a "projectile" or a "target"? etc.)*/
+    public final List<String> types = new LinkedList<>();
 
     /** Called every game loop;
      * method for "AI" for simple single player games;
@@ -284,9 +287,7 @@ public abstract class Node implements IDrawable{
     public void setCollideable(boolean collideable) {
        if(collideable){
            if(getWidth() < 1 || getHeight() < 1){
-               delayAction(()->{
-                   setCollideable(true);
-               });
+               delayAction(()->setCollideable(true));
            }else{
                privateArea = new PrivateAreaRect(this);
                isCollideable = true;
@@ -295,13 +296,12 @@ public abstract class Node implements IDrawable{
            isCollideable = false;
            privateArea = null;
        }
-
     }
 
     /**
      * @return List of collisions for this node
      */
-    public LinkedList<CollisionShape> getCollisions() {
+    public LinkedList<ACollisionShape> getCollisions() {
         return collisions;
     }
 
@@ -345,8 +345,8 @@ public abstract class Node implements IDrawable{
     public boolean collidesWith(Node intruder){
         if(!isCollideable) return false;
 
-        for(CollisionShape collision : collisions){
-            for(CollisionShape intruderCollision : intruder.collisions){
+        for(ACollisionShape collision : collisions){
+            for(ACollisionShape intruderCollision : intruder.collisions){
                 if(collision.isColliding(intruderCollision)){
                     return true;
                 }
@@ -364,13 +364,13 @@ public abstract class Node implements IDrawable{
     public void eventIfCollidesWith(Node intruder){
         if(!isCollideable) return;
 
-        for(CollisionShape collision : collisions){
+        for(ACollisionShape collision : collisions){
 
             if(intruder instanceof Group){
                 ((Group)intruder).forEachChildren((Node child)->child.eventIfCollidesWith(this));
             }
 
-            for(CollisionShape intruderCollision : intruder.collisions){
+            for(ACollisionShape intruderCollision : intruder.collisions){
                 if(collision.isColliding(intruderCollision)){
                     CollisionEvent collisionEvent = new CollisionEvent(this, intruder, collision, intruderCollision);
                     intruder.invokeEvent(collisionEvent);
@@ -387,7 +387,7 @@ public abstract class Node implements IDrawable{
         if(!isCollideable) return;
 
         privateArea.updateProperties();
-        for(CollisionShape cs : collisions){
+        for(ACollisionShape cs : collisions){
             cs.updateProperties(this);
         }
     }
@@ -397,6 +397,8 @@ public abstract class Node implements IDrawable{
     public PrivateAreaRect getPrivateArea() {
         return privateArea;
     }
+
+    // MOUSE
 
     /**
      * @return True, if node should receive special events about mouse dragging
@@ -419,16 +421,17 @@ public abstract class Node implements IDrawable{
         return mouseState;
     }
 
+    // DELAYED ACTIONS
+
     protected void delayAction(DelayedAction action){
         delayedActions.add(action);
         hasDelayedActions = true;
     }
 
     /**
-     * Sometimes is not possible to do requested action immediately
-     * (getting text width while font is not loaded yet).
-     * For such cases is possible to delay actions to future and
-     * invoke them next Frame by automatic updateLogic().
+     * Sometimes it is not possible to do requested action immediately.
+     * For such cases it is possible to delay actions to future frame and
+     * invoke them automatically by updateLogic().
      */
     protected interface DelayedAction{
         /**

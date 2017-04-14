@@ -1,6 +1,6 @@
 package net.sf.ardengine.rpg;
 
-import net.sf.ardengine.World;
+import net.sf.ardengine.AWorld;
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ import java.io.File;
  *  Abstract methods has to be implemented in order
  *  for multiplayer function properly.
  */
-public abstract class ALevel extends World {
+public abstract class ALevel extends AWorld {
 
     /**
      * Called after Core loads this level and adds it to Game.

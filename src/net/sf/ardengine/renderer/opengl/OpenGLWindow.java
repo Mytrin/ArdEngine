@@ -133,7 +133,7 @@ public class OpenGLWindow {
 	}
 
 	/**
-	 * Called by GL Renderer to swapBuffers etc.
+	 * Called by GL Renderers to swapBuffers etc.
 	 */
 	public void afterRender() {
 		glfwSwapBuffers(windowId);

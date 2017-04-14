@@ -1,6 +1,6 @@
 package net.sf.ardengine.sound;
 
-import net.sf.ardengine.renderer.Renderer;
+import net.sf.ardengine.renderer.Renderers;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemException;
@@ -25,9 +25,9 @@ public class SoundManager {
 
     /**
      * Initializes SoundSystem, called automatically.
-     * @param preferredLib Renderer.JAVAFX(JavaSound) / other(OpenAL)
+     * @param preferredLib Renderers.JAVAFX(JavaSound) / other(OpenAL)
      */
-    public static void init(Renderer preferredLib){
+    public static void init(Renderers preferredLib){
         try
         {
             //Plugins
@@ -37,7 +37,7 @@ public class SoundManager {
             SoundSystemConfig.setCodec( "mod", CodecIBXM.class );
             SoundSystemConfig.setCodec( "xm", CodecIBXM.class );
 
-            system = new SoundSystem((preferredLib==Renderer.JAVAFX)?LibraryJavaSound.class:LibraryLWJGLOpenAL.class);
+            system = new SoundSystem((preferredLib== Renderers.JAVAFX)?LibraryJavaSound.class:LibraryLWJGLOpenAL.class);
 
             //SoundSystemConfig.setSoundFilesPackage("net/sf/ardengine/res/");
             //system.backgroundMusic( "boss", "boss.ogg", true);

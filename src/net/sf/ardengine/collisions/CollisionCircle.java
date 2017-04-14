@@ -5,7 +5,7 @@ import net.sf.ardengine.Node;
 /**
  * Collision shape - Circle
  */
-public class CollisionCircle extends CollisionShape{
+public class CollisionCircle extends ACollisionShape {
 
       /**X coord of Circle center in shape*/
       private float centerX;
@@ -44,7 +44,7 @@ public class CollisionCircle extends CollisionShape{
       }
   
       @Override
-      public boolean isColliding(CollisionShape cs){
+      public boolean isColliding(ACollisionShape cs){
         
         if(cs instanceof CollisionPolygon){
             CollisionPolygon cp=(CollisionPolygon)cs;

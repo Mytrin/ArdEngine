@@ -8,7 +8,7 @@ import net.sf.ardengine.Node;
 /**
  * Collision shape - Polygon
  */
-public class CollisionPolygon extends CollisionShape {
+public class CollisionPolygon extends ACollisionShape {
 	/** Coords of polygon in node */
 	private float[] coords;
 	/** Coords of polygon in world */
@@ -54,7 +54,7 @@ public class CollisionPolygon extends CollisionShape {
     }
 
 	@Override
-	public boolean isColliding(CollisionShape cs) {
+	public boolean isColliding(ACollisionShape cs) {
 
 		if (cs instanceof CollisionPolygon) {
 

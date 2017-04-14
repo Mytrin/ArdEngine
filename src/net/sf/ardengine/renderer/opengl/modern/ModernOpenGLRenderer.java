@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import net.sf.ardengine.Group;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.SpriteSheet;
-import net.sf.ardengine.collisions.CollisionShape;
+import net.sf.ardengine.collisions.ACollisionShape;
 import net.sf.ardengine.renderer.ISpriteSheetImpl;
 import net.sf.ardengine.renderer.opengl.modern.shapes.ModernOpenGLCircleImpl;
 import net.sf.ardengine.renderer.opengl.modern.shapes.ModernOpenGLLineImpl;
@@ -179,7 +179,7 @@ public class ModernOpenGLRenderer extends OpenGLRenderer{
 				IRenderableCollision rc = collideable.getPrivateArea();
 				ModernCollisionRenderer.draw(rc);
 
-				for(CollisionShape shape :collideable.getCollisions()){
+				for(ACollisionShape shape :collideable.getCollisions()){
 					ModernCollisionRenderer.draw(shape);
 				}
 

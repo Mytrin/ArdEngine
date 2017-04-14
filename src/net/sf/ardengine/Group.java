@@ -24,7 +24,7 @@ public class Group extends Node{
     /**Current height of group content*/
     protected float height = 0;
 
-    /**Renderer specific implementation*/
+    /**Renderers specific implementation*/
     private final IGroupImpl implementation;
 
     /**

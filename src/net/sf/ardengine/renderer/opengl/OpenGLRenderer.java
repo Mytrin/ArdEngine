@@ -143,11 +143,11 @@ public abstract class OpenGLRenderer implements IRenderer, Runnable{
 	 * @param width Width of new window
 	 * @param height Height of new window
 	 */
-	public static void setupRenderer(Renderer glMode, int width, int height){
+	public static void setupRenderer(Renderers glMode, int width, int height){
         try{
             OpenGLRenderer renderer;
 
-            if(glMode == Renderer.GL){
+            if(glMode == Renderers.GL){
 				renderer = new ModernOpenGLRenderer(width, height);
             }else{
                 renderer = new LegacyOpenGLRenderer(width, height);

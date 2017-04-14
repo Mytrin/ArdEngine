@@ -1,6 +1,6 @@
 package net.sf.ardengine.renderer;
 
-public enum Renderer {
+public enum Renderers {
 JAVAFX,
 LEGACY_GL,
 GL,

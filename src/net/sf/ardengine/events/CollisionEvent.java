@@ -1,7 +1,7 @@
 package net.sf.ardengine.events;
 
 import net.sf.ardengine.Node;
-import net.sf.ardengine.collisions.CollisionShape;
+import net.sf.ardengine.collisions.ACollisionShape;
 
 /**
  * Event, which is used by Collision detection
@@ -14,19 +14,19 @@ public class CollisionEvent extends AEvent{
     /**Node, with which receiver collided*/
     private Node intruder;
 
-    /**Node's CollisionShape, which collided*/
-    private CollisionShape myShape;
-    /**Intruder Node's CollisionShape, which collided*/
-    private CollisionShape intruderShape;
+    /**Node's ACollisionShape, which collided*/
+    private ACollisionShape myShape;
+    /**Intruder Node's ACollisionShape, which collided*/
+    private ACollisionShape intruderShape;
 
     /**
      *
      * @param me Node, which collided
      * @param intruder Node, with which receiver collided
-     * @param myShape Node's CollisionShape, which collided
-     * @param intruderShape Intruder Node's CollisionShape, which collided
+     * @param myShape Node's ACollisionShape, which collided
+     * @param intruderShape Intruder Node's ACollisionShape, which collided
      */
-    public CollisionEvent(Node me, Node intruder, CollisionShape myShape, CollisionShape intruderShape){
+    public CollisionEvent(Node me, Node intruder, ACollisionShape myShape, ACollisionShape intruderShape){
         super(EventType.COLLISION);
         this.me = me;
         this.intruder = intruder;
@@ -42,16 +42,16 @@ public class CollisionEvent extends AEvent{
     }
 
     /**
-     * @return Intruder Node's CollisionShape, which collided
+     * @return Intruder Node's ACollisionShape, which collided
      */
-    public CollisionShape getIntruderShape() {
+    public ACollisionShape getIntruderShape() {
         return intruderShape;
     }
 
     /**
-     * @return Source Node's CollisionShape, which collided
+     * @return Source Node's ACollisionShape, which collided
      */
-    public CollisionShape getMyShape() {
+    public ACollisionShape getMyShape() {
         return myShape;
     }
 

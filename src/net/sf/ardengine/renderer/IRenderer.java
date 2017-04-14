@@ -15,7 +15,7 @@ import net.sf.ardengine.text.Text;
  * 
  * @author Mytrin
  *
- * Renderer uses given library to draw given objects.
+ * Renderers uses given library to draw given objects.
  * This class also defines, which methods are common for all renderers.
  *
  */
