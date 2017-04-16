@@ -56,7 +56,7 @@ public interface IGame {
      * @param cameraY Global Y translation for all object with non static coords
      */
     public default void setCameraY(float cameraY){
-        Core.cameraX = cameraY;
+        Core.cameraY = cameraY;
     }
 
     /**

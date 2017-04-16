@@ -1,6 +1,7 @@
 package net.sf.ardengine.renderer.opengl.legacy.util;
 
 import javafx.scene.paint.Color;
+import net.sf.ardengine.Core;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -19,10 +20,10 @@ public class LegacyCollisionRenderer {
         glLineWidth(1.3f);
         glBegin(GL_LINE_STRIP);
         for( int i=0; i <coords.length; i+=2){
-            glVertex2f(coords[i], coords[i+1]);
+            glVertex2f(coords[i] - Core.cameraX, coords[i+1] - Core.cameraY);
         }
         //line strip
-        glVertex2f(coords[0], coords[1]);
+        glVertex2f(coords[0] - Core.cameraX, coords[1] - Core.cameraY);
         glEnd();
         glPopMatrix();
 

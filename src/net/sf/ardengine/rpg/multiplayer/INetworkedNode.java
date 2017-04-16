@@ -28,7 +28,7 @@ public interface INetworkedNode {
         /**
          * @param targetNode Node, which states are stored
          */
-        StoredStates(INetworkedNode targetNode) {
+        public StoredStates(INetworkedNode targetNode) {
             this.targetNode = targetNode;
         }
 

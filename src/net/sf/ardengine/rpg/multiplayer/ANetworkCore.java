@@ -118,9 +118,6 @@ public abstract class ANetworkCore {
         if(handler != null){
             handler.handle(message);
         }else{
-            System.out.println("Loaded:");
-            handlers.keySet().stream().forEach((String key)-> System.out.println(key));
-
             Logger.getLogger(ANetworkCore.class.getName()).warning(
                     "Unspecified type of JSONMessage: "+message.getType()+". Message ignored.");
         }
@@ -149,7 +146,7 @@ public abstract class ANetworkCore {
      * @return Frames passed since last renderer update
      */
     private int countPassedFrames(long delta){
-        float frameLength = 1f/(float)Core.renderer.getDesiredFPS();
+        float frameLength = 1000f/(float)Core.renderer.getDesiredFPS();
         return (int)(delta/frameLength);
     }
 

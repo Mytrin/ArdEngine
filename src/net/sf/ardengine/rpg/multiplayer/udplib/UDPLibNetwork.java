@@ -9,6 +9,8 @@ import com.gmail.lepeska.martin.udplib.util.ConfigLoader;
 import net.sf.ardengine.rpg.multiplayer.network.*;
 
 import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +22,12 @@ public class UDPLibNetwork implements INetwork {
 
     private final AGroupNetwork networkImpl;
     private final LinkedList<UDPLibNetworkListener> mappedListeners = new LinkedList<>();
+    private final String serverAddress;
 
     private UDPLibNetwork(String userName, String groupPassword, String hostAddress, String groupAddress, int port) throws UnknownHostException {
-        networkImpl = new ServerGroupNetwork(userName, groupPassword, hostAddress, groupAddress, port,
+        this.networkImpl = new ServerGroupNetwork(userName, groupPassword, hostAddress, groupAddress, port,
                 ConfigLoader.getInt("user-info-period", 5000), ConfigLoader.getInt("dead-time", 2000));
+        this.serverAddress = hostAddress;
     }
 
     /**
@@ -69,7 +73,8 @@ public class UDPLibNetwork implements INetwork {
     }
 
     private UDPLibNetwork(String userName, String groupPassword, String serverAddress, int port) throws UnknownHostException{
-        networkImpl = new ClientGroupNetwork(userName, groupPassword, serverAddress, port);
+        this.networkImpl = new ClientGroupNetwork(userName, groupPassword, serverAddress, port);
+        this.serverAddress = serverAddress;
     }
 
     /**
@@ -116,6 +121,21 @@ public class UDPLibNetwork implements INetwork {
                 currentPlayer.add(new UDPLibNetworkPlayer(groupUser))
         );
         return currentPlayer;
+    }
+
+    @Override
+    public INetworkPlayer getServerUser() {
+        UDPLibNetworkPlayer user = null;
+        try{
+            InetAddress serverIP = InetAddress.getByName(serverAddress);
+            for( GroupUser groupUser : networkImpl.getCurrentUsers()) {
+                if(groupUser.ip.equals(serverIP)){
+                    user = new UDPLibNetworkPlayer(groupUser);
+                }
+            }
+        }catch(Exception e){}
+
+        return user;
     }
 
     @Override

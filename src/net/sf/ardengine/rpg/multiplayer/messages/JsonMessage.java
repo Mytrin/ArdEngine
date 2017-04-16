@@ -129,6 +129,20 @@ public class JsonMessage {
         return null;
     }
 
+    /**
+     * @param key property of json
+     * @return specified property value or null, if none or non boolean
+     */
+    public Boolean getValueAsBoolean(String key){
+        JsonPrimitive property = json.getAsJsonPrimitive(key);
+        if(property != null){
+            try{
+                return property.getAsBoolean();
+            }catch(Exception e){}
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return json.toString();

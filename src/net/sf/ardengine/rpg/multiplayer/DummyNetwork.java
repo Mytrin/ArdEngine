@@ -37,6 +37,11 @@ class DummyNetwork implements INetwork {
     }
 
     @Override
+    public INetworkPlayer getServerUser() {
+        return null;
+    }
+
+    @Override
     public void sendMessage(INetworkPlayer target, String message) {}
 
     @Override

@@ -76,17 +76,38 @@ public class MouseTracker extends Node{
      * @param mouseY mouse coordinate at actual scene
      */
     public void update(float mouseX, float mouseY){
-        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
-        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+        setX(mouseX/Core.renderer.getWindowWidth()*Core.renderer.getBaseWindowWidth());
+        setY(mouseY/Core.renderer.getWindowHeight()*Core.renderer.getBaseWindowHeight());
 
         regenerateEvents(InputTypes.MOUSE_NONE);
 
         for(Node node: Core.getNodes()){
-            updateMouseMovementState(node);
+            if(node.isStatic()){
+                updateMouseMovementState(node);
+            }
         }
 
         for(Node node: draggedNodes){
-            node.invokeEvent(draggedEvent);
+            if(node.isStatic()){
+                node.invokeEvent(draggedEvent);
+            }
+        }
+
+        setX(getX() + Core.cameraX);
+        setY(getY() + Core.cameraY);
+
+        regenerateEvents(InputTypes.MOUSE_NONE);
+
+        for(Node node: Core.getNodes()){
+            if(!node.isStatic()){
+                updateMouseMovementState(node);
+            }
+        }
+
+        for(Node node: draggedNodes){
+            if(!node.isStatic()){
+                node.invokeEvent(draggedEvent);
+            }
         }
     }
 
@@ -132,7 +153,20 @@ public class MouseTracker extends Node{
         regenerateEvents(button);
 
         for(Node node: Core.getNodes()) {
-            updateMousePressedState(node, button);
+            if(node.isStatic()) {
+                updateMousePressedState(node, button);
+            }
+        }
+
+        setX(getX() + Core.cameraX);
+        setY(getY() + Core.cameraY);
+
+        regenerateEvents(InputTypes.MOUSE_NONE);
+
+        for(Node node: Core.getNodes()){
+            if(!node.isStatic()){
+                updateMousePressedState(node, button);
+            }
         }
     }
 
@@ -193,13 +227,36 @@ public class MouseTracker extends Node{
         regenerateEvents(button);
 
         for(Node node: Core.getNodes()) {
-            updateMouseReleasedState(node, button);
+            if(node.isStatic()) {
+                updateMouseReleasedState(node, button);
+            }
         }
 
         for(Node dragged : draggedNodes){
-            dragged.getMouseState().isMouseDragged = false;
-            dragged.invokeEvent(dragEndEvent);
+            if(dragged.isStatic()) {
+                dragged.getMouseState().isMouseDragged = false;
+                dragged.invokeEvent(dragEndEvent);
+            }
         }
+
+        setX(getX() + Core.cameraX);
+        setY(getY() + Core.cameraY);
+
+        regenerateEvents(InputTypes.MOUSE_NONE);
+
+        for(Node node: Core.getNodes()) {
+            if(!node.isStatic()) {
+                updateMouseReleasedState(node, button);
+            }
+        }
+
+        for(Node dragged : draggedNodes){
+            if(!dragged.isStatic()) {
+                dragged.getMouseState().isMouseDragged = false;
+                dragged.invokeEvent(dragEndEvent);
+            }
+        }
+
         draggedNodes.clear();
     }
 

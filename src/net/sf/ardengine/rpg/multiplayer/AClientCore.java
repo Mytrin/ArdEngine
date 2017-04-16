@@ -86,6 +86,13 @@ public abstract class AClientCore extends ANetworkCore {
         });
     }
 
+    /**
+     * Automatically called every game loop,
+     * method for client related logic
+     * @param passedFrames frames passed since last update
+     */
+    protected abstract void updateClientLogic(int passedFrames);
+
     private void updateStateIfNotLate(INetworkedNode node, JsonMessage message){
         long messageTimestamp = message.getValueAsLong(JsonMessage.TIMESTAMP);
         int messageIndex = message.getValueAsInt(DeltaStateMessage.STATE_INDEX);

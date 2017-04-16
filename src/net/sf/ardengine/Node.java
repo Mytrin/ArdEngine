@@ -85,7 +85,7 @@ public abstract class Node implements IDrawable{
 	@Override
 	public float getX() {
 		if(!isStaticLocked) return x+layoutOffsetX;
-		return staticX;
+		return staticX+Core.cameraX;
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public abstract class Node implements IDrawable{
 	@Override
 	public float getY() {
         if(!isStaticLocked) return y+layoutOffsetY;
-        return staticY;
+        return staticY+Core.cameraY;
 	}
 
 	@Override

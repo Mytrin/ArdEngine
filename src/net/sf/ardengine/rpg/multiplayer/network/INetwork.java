@@ -29,6 +29,11 @@ public interface INetwork {
     public List<INetworkPlayer> getCurrentUsers();
 
     /**
+     * @return object representing user acting as server
+     */
+    public INetworkPlayer getServerUser();
+
+    /**
      * Sends message to other client in Network
      * @param target recipient
      * @param message data

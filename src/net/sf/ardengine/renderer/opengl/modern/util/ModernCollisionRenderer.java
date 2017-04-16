@@ -1,6 +1,7 @@
 package net.sf.ardengine.renderer.opengl.modern.util;
 
 import javafx.scene.paint.Color;
+import net.sf.ardengine.Core;
 import net.sf.ardengine.renderer.opengl.lib.shader.Shader;
 import net.sf.ardengine.renderer.opengl.lib.shader.Uniform;
 import net.sf.ardengine.renderer.opengl.modern.ModernOpenGLRenderer;
@@ -50,6 +51,10 @@ public class ModernCollisionRenderer {
 
         public void draw(IRenderableCollision collision){
             this.coords = collision.getLineCoordinates();
+            for(int i=0; i < coords.length; i+=2){
+                coords[i] -= Core.cameraX;
+                coords[i+1] -= Core.cameraY;
+            }
             this.color = collision.getLineColor();
 
             FloatBuffer vertexPositionsBuffer = BufferUtils.createFloatBuffer(coords.length+2);
