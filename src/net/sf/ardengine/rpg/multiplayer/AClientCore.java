@@ -96,7 +96,6 @@ public abstract class AClientCore extends ANetworkCore {
     private void updateStateIfNotLate(INetworkedNode node, JsonMessage message){
         long messageTimestamp = message.getValueAsLong(JsonMessage.TIMESTAMP);
         int messageIndex = message.getValueAsInt(DeltaStateMessage.STATE_INDEX);
-        System.out.println(message + ": "+(messageTimestamp >= updateTimeStamp)+" -> "+actualIndex);
 
         if(updateTimeStamp == CURRENT_TIME_INDEFINITE){ //initialize timestamp on start
             updateTimeStamp = messageTimestamp - CLIENT_LAG;

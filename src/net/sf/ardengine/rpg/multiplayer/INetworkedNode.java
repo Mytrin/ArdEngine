@@ -50,7 +50,6 @@ public interface INetworkedNode {
                 fallBackCount = 0;
             }else{
                 if(fallBackCount < FALLBACK_LIMIT){
-                    System.out.println("Fallback: "+ANetworkCore.FRAMES_PER_STATE*fallBackCount);
                     fallBackCount++;
                     actualState = lastState;
                     actualFrame += ANetworkCore.FRAMES_PER_STATE*fallBackCount;
@@ -63,7 +62,6 @@ public interface INetworkedNode {
         }
 
         private void updateClientState(JsonObject actualState, int actualStateIndex, int actualFrame){
-            System.out.println(this+"Updating: "+actualStateIndex+" - "+actualFrame);
             if(actualState != null){
                 for(int i=1; i <= 3 ; i++){
                     JsonObject nextState = storedStates[bufferIndex(actualStateIndex+i)];
