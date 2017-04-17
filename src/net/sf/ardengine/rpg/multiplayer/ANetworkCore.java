@@ -123,7 +123,7 @@ public abstract class ANetworkCore {
         }
     }
 
-    private void updateStateIndex(int passedFrames){
+    protected void updateStateIndex(int passedFrames){
         actualFrame+=passedFrames;
 
         if(actualFrame<FRAMES_PER_STATE-1){
@@ -136,8 +136,8 @@ public abstract class ANetworkCore {
             actualIndex++;
             changedIndex = true;
 
-            if(actualIndex==INetworkedNode.StoredStates.STATES_BUFFER_SIZE){
-                actualIndex=0;
+            if(actualIndex>=INetworkedNode.StoredStates.STATES_BUFFER_SIZE){
+                actualIndex-=INetworkedNode.StoredStates.STATES_BUFFER_SIZE;
             }
         }
     }

@@ -11,8 +11,9 @@ public interface INetworkedNode {
 
     class StoredStates{
         /**Capacity of state buffer*/
-        public static final int STATES_BUFFER_SIZE = 10;
-        private static final int CLEAR_OFFSET = 5;
+        public static final int STATES_BUFFER_SIZE = 30;
+        private static final int CLEAR_OFFSET = 15;
+        private static final int FALLBACK_LIMIT = 10;
 
         public static final int FRAME_INDEFINITE = -1;
 
@@ -44,19 +45,25 @@ public interface INetworkedNode {
             JsonObject actualState = storedStates[currentStateIndex];
 
             if(actualState!=null){
-                //Saving for situations, where is actualState missing
+                //Saving for situations, when actualState is missing
                 lastState = actualState;
                 fallBackCount = 0;
             }else{
-                fallBackCount++;
-                actualState = lastState;
-                actualFrame += ANetworkCore.FRAMES_PER_STATE*fallBackCount;
+                if(fallBackCount < FALLBACK_LIMIT){
+                    System.out.println("Fallback: "+ANetworkCore.FRAMES_PER_STATE*fallBackCount);
+                    fallBackCount++;
+                    actualState = lastState;
+                    actualFrame += ANetworkCore.FRAMES_PER_STATE*fallBackCount;
+                }else{
+                    return;
+                }
             }
 
             updateClientState(actualState, currentStateIndex, actualFrame);
         }
 
         private void updateClientState(JsonObject actualState, int actualStateIndex, int actualFrame){
+            System.out.println(this+"Updating: "+actualStateIndex+" - "+actualFrame);
             if(actualState != null){
                 for(int i=1; i <= 3 ; i++){
                     JsonObject nextState = storedStates[bufferIndex(actualStateIndex+i)];

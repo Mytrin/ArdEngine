@@ -10,7 +10,7 @@ import net.sf.ardengine.rpg.multiplayer.network.INetwork;
 public abstract class AClientCore extends ANetworkCore {
 
     /**How many states is client delayed after server*/
-    public static final int CLIENT_LAGGED_STATES = 2;
+    public static final int CLIENT_LAGGED_STATES = 3;
 
     private static final int CLIENT_LAG = 100;
     private static final long CURRENT_TIME_INDEFINITE = -1;
@@ -96,11 +96,16 @@ public abstract class AClientCore extends ANetworkCore {
     private void updateStateIfNotLate(INetworkedNode node, JsonMessage message){
         long messageTimestamp = message.getValueAsLong(JsonMessage.TIMESTAMP);
         int messageIndex = message.getValueAsInt(DeltaStateMessage.STATE_INDEX);
+        System.out.println(message + ": "+(messageTimestamp >= updateTimeStamp)+" -> "+actualIndex);
 
         if(updateTimeStamp == CURRENT_TIME_INDEFINITE){ //initialize timestamp on start
             updateTimeStamp = messageTimestamp - CLIENT_LAG;
 
             initIndex(messageIndex);
+        }
+
+        if(serverIndexDifference(messageIndex) > CLIENT_LAGGED_STATES){
+            updateStateIndex(ANetworkCore.FRAMES_PER_STATE);
         }
 
         // If datagram arrived too late, we have to drop it
@@ -109,10 +114,23 @@ public abstract class AClientCore extends ANetworkCore {
         }
     }
 
+    protected int serverIndexDifference(int serverIndex){
+        if(serverIndex >= actualIndex){
+            return serverIndex - actualIndex;
+        }else{
+            return serverIndex + INetworkedNode.StoredStates.STATES_BUFFER_SIZE - actualIndex;
+        }
+    }
+
+
     private void initIndex(int serverIndex){
         actualIndex = serverIndex - 2;
         if(actualIndex < 0){
             actualIndex  = INetworkedNode.StoredStates.STATES_BUFFER_SIZE - serverIndex;
+        }else if(actualIndex >= INetworkedNode.StoredStates.STATES_BUFFER_SIZE){
+            while(actualIndex >= INetworkedNode.StoredStates.STATES_BUFFER_SIZE){
+                actualIndex -= INetworkedNode.StoredStates.STATES_BUFFER_SIZE;
+            }
         }
     }
 
