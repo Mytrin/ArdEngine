@@ -84,6 +84,8 @@ public abstract class AClientCore extends ANetworkCore {
         synchronizedNodes.values().forEach((INetworkedNode iNetworkedNode) -> {
             iNetworkedNode.triggerState(actualIndex, actualFrame);
         });
+
+        updateClientLogic(passedFrames);
     }
 
     /**
