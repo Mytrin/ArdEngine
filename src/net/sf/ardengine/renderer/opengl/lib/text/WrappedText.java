@@ -21,10 +21,11 @@ import static org.lwjgl.stb.STBTruetype.stbtt_GetPackedQuad;
  * STEPS:
  * 1) Break String into words
  * 2) Determine length of each word and their coordinates
+ *      - if line is too long, \n is inserted before currently tested word
  * 3) Split too large words by inserting \n
  * 4) Create new text String, sum spaces between words
  *
- * TODO space sensitive split, clean this up
+ * TODO space sensitive split, clean mess this up
  */
 public class WrappedText {
 
@@ -133,7 +134,6 @@ public class WrappedText {
                     }else{
                         spaceLength = 0;
                     }
-
                     if(wrappingWidth == -1){ //no wrapping width - no check
                         if(!firstWord){
                             wrappedText.append(" ");
@@ -150,7 +150,7 @@ public class WrappedText {
                             lineLength+=spaceLength;
                         }else{
                             firstWord = false;
-                        }
+                       }
                         wrappedText.append(actWord.getContent());
                         lineLength += actWord.getLength();
                         previousWord = actWord;
@@ -159,7 +159,7 @@ public class WrappedText {
                         wrappedText.append(actWord.getContent());
                         largestLine = Math.max(largestLine, lineLength);
                         lineLength = actWord.getLength();
-                        firstWord=true;
+                     //   firstWord=true;
                         previousWord = null;
                         lineCount++;
                     }
