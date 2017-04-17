@@ -80,11 +80,16 @@ public abstract class Node implements IDrawable{
                 action.action();
             }
         }
+
+        if(isStatic()){ //no way to get notify when camera changed yet
+            updateCollisions();
+        }
     }
 
 	@Override
 	public float getX() {
 		if(!isStaticLocked) return x+layoutOffsetX;
+
 		return staticX+Core.cameraX;
 	}
 
@@ -97,6 +102,7 @@ public abstract class Node implements IDrawable{
 	@Override
 	public float getY() {
         if(!isStaticLocked) return y+layoutOffsetY;
+
         return staticY+Core.cameraY;
 	}
 
@@ -148,6 +154,7 @@ public abstract class Node implements IDrawable{
 	@Override
 	public void setStatic(boolean staticLock) {
 		isStaticLocked = staticLock;
+		updateCollisions();
 	}
 
     @Override
@@ -388,7 +395,7 @@ public abstract class Node implements IDrawable{
 
         privateArea.updateProperties();
         for(ACollisionShape cs : collisions){
-            cs.updateProperties(this);
+            cs.updateProperties();
         }
     }
     /**

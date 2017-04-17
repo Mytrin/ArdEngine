@@ -20,10 +20,10 @@ public class LegacyCollisionRenderer {
         glLineWidth(1.3f);
         glBegin(GL_LINE_STRIP);
         for( int i=0; i <coords.length; i+=2){
-            glVertex2f(coords[i] - Core.cameraX, coords[i+1] - Core.cameraY);
+            glVertex2f(coords[i], coords[i+1]);
         }
         //line strip
-        glVertex2f(coords[0] - Core.cameraX, coords[1] - Core.cameraY);
+        glVertex2f(coords[0], coords[1]);
         glEnd();
         glPopMatrix();
 

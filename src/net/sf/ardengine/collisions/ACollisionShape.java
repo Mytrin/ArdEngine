@@ -27,7 +27,7 @@ public abstract class ACollisionShape implements IRenderableCollision {
 	 * Updates shape's coords based on node's coords(called automatically by
 	 * Node).
 	 */
-	public abstract void updateProperties(Node e);
+	public abstract void updateProperties();
 
 	/**
 	 * @return true if shape counts with scale

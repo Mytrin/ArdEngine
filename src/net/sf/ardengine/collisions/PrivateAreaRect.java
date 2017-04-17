@@ -1,6 +1,7 @@
 package net.sf.ardengine.collisions;
 
 import javafx.scene.paint.Color;
+import net.sf.ardengine.Core;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.renderer.util.IRenderableCollision;
 
@@ -28,7 +29,7 @@ public class PrivateAreaRect implements IRenderableCollision {
     /**Indicator if auto detect node scale*/
     private boolean withScale=false;
     /**Variable, where is stored actual node scale*/
-    private float aktScale=1;
+    private float actScale =1;
 
     private final Node parentNode;
     
@@ -54,7 +55,7 @@ public class PrivateAreaRect implements IRenderableCollision {
      if(!withScale){
         return (centerX - actWidth/2);
      }else{
-         return (centerX - actWidth/2*aktScale);
+         return (centerX - actWidth/2* actScale);
      }
     }
 
@@ -65,7 +66,7 @@ public class PrivateAreaRect implements IRenderableCollision {
      if(!withScale){
         return (centerX + actWidth/2);
      }else{
-         return centerX + actWidth/2*aktScale;
+         return centerX + actWidth/2* actScale;
      }
     }
 
@@ -76,7 +77,7 @@ public class PrivateAreaRect implements IRenderableCollision {
      if(!withScale){
         return (centerY - actHeight/2);
      }else{
-         return centerY - actHeight/2*aktScale;
+         return centerY - actHeight/2* actScale;
      }
     }
 
@@ -87,7 +88,7 @@ public class PrivateAreaRect implements IRenderableCollision {
       if(!withScale){
         return (centerY + actHeight/2);
       }else{
-         return centerY + actHeight/2*aktScale;
+         return centerY + actHeight/2* actScale;
      }
     }
 
@@ -144,7 +145,7 @@ public class PrivateAreaRect implements IRenderableCollision {
         actWidth=(float)(x2-x);
         actHeight=(float)(y2-y);
 
-        aktScale=parentNode.getScale();
+        actScale =parentNode.getScale();
     }
 
      /**@return withScale true if this PrivateAreaRect counts with scale*/
@@ -164,11 +165,18 @@ public class PrivateAreaRect implements IRenderableCollision {
 
     @Override
     public float[] getLineCoordinates() {
-        return new float[]{
+        float[] renderCoords = new float[]{
                 startX, startY,
                 endX,   startY,
                 endX,   endY,
                 startX, endY
         };
+
+        for(int i=0; i < renderCoords.length; i+=2){
+            renderCoords[i] -= Core.cameraX;
+            renderCoords[i+1] -= Core.cameraY;
+        }
+
+        return renderCoords;
     }
 }

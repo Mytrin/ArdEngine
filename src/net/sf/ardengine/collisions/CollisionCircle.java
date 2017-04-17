@@ -1,5 +1,6 @@
 package net.sf.ardengine.collisions;
 
+import net.sf.ardengine.Core;
 import net.sf.ardengine.Node;
 
 /**
@@ -27,6 +28,8 @@ public class CollisionCircle extends ACollisionShape {
     /**Coordinates cached for debug rendering*/
     private float[] renderCoords;
 
+    private Node targetNode;
+
       /**
        * @param centerX X coord of center in node(like node's X would be [0;0])
        * @param centerY Y coord of center in node(like node's Y would be [0;0])
@@ -39,8 +42,9 @@ public class CollisionCircle extends ACollisionShape {
         this.actCenterX=centerX;
         this.actCenterY=centerY;
         this.radius=radius;
-        nodeX=e.getX();
-        nodeY=e.getY();
+        this.targetNode = e;
+
+        updateProperties();
       }
   
       @Override
@@ -105,17 +109,17 @@ public class CollisionCircle extends ACollisionShape {
     }
       
       @Override
-     public void updateProperties(Node e){
-        nodeX=e.getX();
-        nodeY=e.getY();
-        aktScale=e.getScale();
-        float nodeCenterX=e.getX()+e.getWidth()/2;
-        float nodeCenterY=e.getY()+e.getHeight()/2;
+     public void updateProperties(){
+        nodeX=targetNode.getX();
+        nodeY=targetNode.getY();
+        aktScale=targetNode.getScale();
+        float nodeCenterX=targetNode.getX()+targetNode.getWidth()/2;
+        float nodeCenterY=targetNode.getY()+targetNode.getHeight()/2;
         float angleRadians;
-        if(!(e.getAngle()<0)){
-            angleRadians =(float)((e.getAngle()) * Math.PI / 180);
+        if(!(targetNode.getAngle()<0)){
+            angleRadians =(float)((targetNode.getAngle()) * Math.PI / 180);
         }else{
-            angleRadians =(float)((360+e.getAngle()) * Math.PI / 180);
+            angleRadians =(float)((360+targetNode.getAngle()) * Math.PI / 180);
         }       
           
             actCenterX=(float)(centerX+(nodeX+centerX - nodeCenterX) * Math.cos(angleRadians) + (nodeY+centerY - nodeCenterY) * Math.sin(angleRadians));
@@ -152,6 +156,11 @@ public class CollisionCircle extends ACollisionShape {
             double angle = Math.PI * 2 * i / 18;
             renderCoords[i*2]=(float)(Math.cos(angle)*radius);
             renderCoords[i*2+1]=(float)(Math.sin(angle)*radius);
+        }
+
+        for(int i=0; i < renderCoords.length; i+=2){
+            renderCoords[i] -= Core.cameraX;
+            renderCoords[i+1] -= Core.cameraY;
         }
     }
 

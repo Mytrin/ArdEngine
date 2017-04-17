@@ -1,6 +1,7 @@
 package net.sf.ardengine;
 
 import javafx.scene.paint.Color;
+import net.sf.ardengine.input.MouseTracker;
 import net.sf.ardengine.renderer.IDrawableImpl;
 import net.sf.ardengine.renderer.IGroupImpl;
 

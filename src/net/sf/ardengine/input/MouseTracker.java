@@ -76,38 +76,17 @@ public class MouseTracker extends Node{
      * @param mouseY mouse coordinate at actual scene
      */
     public void update(float mouseX, float mouseY){
-        setX(mouseX/Core.renderer.getWindowWidth()*Core.renderer.getBaseWindowWidth());
-        setY(mouseY/Core.renderer.getWindowHeight()*Core.renderer.getBaseWindowHeight());
+        setX(mouseX/Core.renderer.getWindowWidth()*Core.renderer.getBaseWindowWidth() + Core.cameraX);
+        setY(mouseY/Core.renderer.getWindowHeight()*Core.renderer.getBaseWindowHeight() + Core.cameraY);
 
         regenerateEvents(InputTypes.MOUSE_NONE);
 
         for(Node node: Core.getNodes()){
-            if(node.isStatic()){
-                updateMouseMovementState(node);
-            }
+            updateMouseMovementState(node);
         }
 
         for(Node node: draggedNodes){
-            if(node.isStatic()){
-                node.invokeEvent(draggedEvent);
-            }
-        }
-
-        setX(getX() + Core.cameraX);
-        setY(getY() + Core.cameraY);
-
-        regenerateEvents(InputTypes.MOUSE_NONE);
-
-        for(Node node: Core.getNodes()){
-            if(!node.isStatic()){
-                updateMouseMovementState(node);
-            }
-        }
-
-        for(Node node: draggedNodes){
-            if(!node.isStatic()){
-                node.invokeEvent(draggedEvent);
-            }
+            node.invokeEvent(draggedEvent);
         }
     }
 
@@ -147,26 +126,13 @@ public class MouseTracker extends Node{
      * @param button related mouse button
      */
     public void mousePressed(InputTypes button, float mouseX, float mouseY){
-        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth());
-        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight());
+        setX(mouseX/ Core.renderer.getWindowWidth()* Core.renderer.getBaseWindowWidth() + Core.cameraX);
+        setY(mouseY/ Core.renderer.getWindowHeight()* Core.renderer.getBaseWindowHeight() + Core.cameraY);
 
         regenerateEvents(button);
 
-        for(Node node: Core.getNodes()) {
-            if(node.isStatic()) {
-                updateMousePressedState(node, button);
-            }
-        }
-
-        setX(getX() + Core.cameraX);
-        setY(getY() + Core.cameraY);
-
-        regenerateEvents(InputTypes.MOUSE_NONE);
-
         for(Node node: Core.getNodes()){
-            if(!node.isStatic()){
-                updateMousePressedState(node, button);
-            }
+            updateMousePressedState(node, button);
         }
     }
 
@@ -221,40 +187,18 @@ public class MouseTracker extends Node{
      * @param button related mouse button
      */
     public void mouseReleased(InputTypes button, float mouseX, float mouseY) {
-        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth());
-        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight());
+        setX(mouseX / Core.renderer.getWindowWidth() * Core.renderer.getBaseWindowWidth() + Core.cameraX);
+        setY(mouseY / Core.renderer.getWindowHeight() * Core.renderer.getBaseWindowHeight() + + Core.cameraY);
 
         regenerateEvents(button);
 
         for(Node node: Core.getNodes()) {
-            if(node.isStatic()) {
-                updateMouseReleasedState(node, button);
-            }
+            updateMouseReleasedState(node, button);
         }
 
         for(Node dragged : draggedNodes){
-            if(dragged.isStatic()) {
-                dragged.getMouseState().isMouseDragged = false;
-                dragged.invokeEvent(dragEndEvent);
-            }
-        }
-
-        setX(getX() + Core.cameraX);
-        setY(getY() + Core.cameraY);
-
-        regenerateEvents(InputTypes.MOUSE_NONE);
-
-        for(Node node: Core.getNodes()) {
-            if(!node.isStatic()) {
-                updateMouseReleasedState(node, button);
-            }
-        }
-
-        for(Node dragged : draggedNodes){
-            if(!dragged.isStatic()) {
-                dragged.getMouseState().isMouseDragged = false;
-                dragged.invokeEvent(dragEndEvent);
-            }
+            dragged.getMouseState().isMouseDragged = false;
+            dragged.invokeEvent(dragEndEvent);
         }
 
         draggedNodes.clear();

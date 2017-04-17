@@ -51,10 +51,6 @@ public class ModernCollisionRenderer {
 
         public void draw(IRenderableCollision collision){
             this.coords = collision.getLineCoordinates();
-            for(int i=0; i < coords.length; i+=2){
-                coords[i] -= Core.cameraX;
-                coords[i+1] -= Core.cameraY;
-            }
             this.color = collision.getLineColor();
 
             FloatBuffer vertexPositionsBuffer = BufferUtils.createFloatBuffer(coords.length+2);

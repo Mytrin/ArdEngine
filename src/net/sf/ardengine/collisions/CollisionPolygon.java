@@ -2,7 +2,9 @@ package net.sf.ardengine.collisions;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import net.sf.ardengine.Core;
 import net.sf.ardengine.Node;
 
 /**
@@ -17,6 +19,8 @@ public class CollisionPolygon extends ACollisionShape {
 	private float centerX;
 	/** Actual Y coord of node's center */
 	private float centerY;
+
+	private Node targetNode;
 
 	/**
 	 * @param coords
@@ -34,7 +38,10 @@ public class CollisionPolygon extends ACollisionShape {
 			actCoords[i] = (coords[i] + targetNode.getX());
 			actCoords[i + 1] = coords[i + 1] + targetNode.getY();
 		}
-		updateProperties(targetNode);
+
+		this.targetNode = targetNode;
+
+		updateProperties();
 	}
 
 	/**
@@ -171,22 +178,22 @@ public class CollisionPolygon extends ACollisionShape {
 	}
 
 	@Override
-	public final void updateProperties(Node e) {
-		aktScale = e.getScale();
-		centerX = e.getX() + e.getWidth() / 2;
-		centerY = e.getY() + e.getHeight() / 2;
+	public final void updateProperties() {
+		aktScale = targetNode.getScale();
+		centerX = targetNode.getX() + targetNode.getWidth() / 2;
+		centerY = targetNode.getY() + targetNode.getHeight() / 2;
 		float angleRadians;
-		if (!(e.getAngle() < 0)) {
-			angleRadians = (float) ((e.getAngle()) * Math.PI / 180);
+		if (!(targetNode.getAngle() < 0)) {
+			angleRadians = (float) ((targetNode.getAngle()) * Math.PI / 180);
 		} else {
-			angleRadians = (float) ((360 + e.getAngle()) * Math.PI / 180);
+			angleRadians = (float) ((360 + targetNode.getAngle()) * Math.PI / 180);
 		}
 		for (int i = 0; i < coords.length - 1; i += 2) {
-			actCoords[i] = (float) (centerX + (e.getX() + coords[i] - centerX)
-					* Math.cos(angleRadians) + (e.getY() + coords[i + 1] - centerY)
+			actCoords[i] = (float) (centerX + (targetNode.getX() + coords[i] - centerX)
+					* Math.cos(angleRadians) + (targetNode.getY() + coords[i + 1] - centerY)
 					* Math.sin(angleRadians));
 			actCoords[i + 1] = (float) (centerY
-					- (e.getX() + coords[i] - centerX) * Math.sin(angleRadians) + (e
+					- (targetNode.getX() + coords[i] - centerX) * Math.sin(angleRadians) + (targetNode
 					.getY() + coords[i + 1] - centerY)
 					* Math.cos(angleRadians));
 		}
@@ -262,7 +269,13 @@ public class CollisionPolygon extends ACollisionShape {
     //DEBUG
     @Override
     public float[] getLineCoordinates() {
-        return actCoords;
+        float[] lineCoords = Arrays.copyOf(actCoords, actCoords.length);
+        for(int i=0; i < lineCoords.length; i+=2){
+            lineCoords[i] -= Core.cameraX;
+            lineCoords[i+1] -= Core.cameraY;
+        }
+
+        return lineCoords;
     }
 
 }
