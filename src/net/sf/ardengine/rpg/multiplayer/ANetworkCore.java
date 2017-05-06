@@ -175,7 +175,12 @@ public abstract class ANetworkCore {
 
     private void executeTasks(long delta){
         List<DelayedTask> finishedTasks = new LinkedList<>();
-        for(DelayedTask task : tasks){
+
+        // Concurrency  modification is possible
+        DelayedTask[] iteratedTasks = new DelayedTask[tasks.size()];
+        tasks.toArray(iteratedTasks);
+
+        for(DelayedTask task : iteratedTasks){
             if(task.timePassed(delta)){
                 task.execute();
                 finishedTasks.add(task);

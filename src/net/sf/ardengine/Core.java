@@ -156,7 +156,7 @@ public class Core {
      *
      * @param delta Time passed since last update (ms)
      */
-    public static final void run(long delta) {
+    public static final void run(long delta){
         if(gameRunning){
             if(!freeze){
                 //events -> node logic -> animations
@@ -216,7 +216,6 @@ public class Core {
             insertDrawable(newDrawable);
         }
         drawablesToAdd.clear();
-
     }
 
     /**
@@ -391,7 +390,13 @@ public class Core {
      * @param clean true, if last AWorld recources should be freed
      */
     public static void setWorld(AWorld world, boolean clean) {
-        if(Core.world!= null && clean) Core.world.cleanUp();
+        if(Core.world != null){
+            if(clean){
+                Core.world.cleanUp();
+            }else{
+                Core.world.hide();
+            }
+        }
 
         Core.world = world;
     }

@@ -26,8 +26,8 @@ public abstract class AWorld {
      * Removes all
      */
     public void cleanUp(){
-        destroyDrawables(drawables);
         clearLists();
+        destroy();
     }
 
     /**
@@ -80,11 +80,22 @@ public abstract class AWorld {
     }
 
     /**
-     * Safely removes Drawable from world and frees its resources
-     * @param drawables drawables to remove
+     * Safely removes all world Drawabled from world and frees its resources
      */
-    public void destroyDrawables(List<IDrawable> drawables){
-        drawablesToDestroy.addAll(drawables);
+    protected void destroy(){
+        drawables.forEach((IDrawable drawable)->Core.removeDrawable(drawable, true));
+        drawables.clear();
+    }
+
+    /**
+     * Safely removes all world Drawabled from world and saves the for later.
+     */
+    void hide(){
+        drawables.forEach((IDrawable drawable)->{
+            Core.removeDrawable(drawable, false);
+            drawablesAddingList.add(drawable);
+        });
+        drawables.clear();
     }
 
     /**
