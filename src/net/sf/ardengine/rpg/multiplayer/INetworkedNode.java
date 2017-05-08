@@ -164,9 +164,10 @@ public interface INetworkedNode {
 
     /**
      * DO NOT OVERRIDE, USED BY NETWORK CORE
-     * to prepare update about state from clients
+     * to prepare update about state for clients
      * @param currentIndex current Server index
      * @param serverTimestamp server time, at which si message sent
+     * @return message with state of this node for clients
      */
     default JsonMessage getJsonMessage(int currentIndex, long serverTimestamp){
        return getStoredStates().createJsonMessage(currentIndex, serverTimestamp);

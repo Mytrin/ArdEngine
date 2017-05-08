@@ -23,7 +23,6 @@ public abstract class ACollisionShape implements IRenderableCollision {
 	public abstract boolean isColliding(ACollisionShape cs);
 
 	/**
-	 * @param e Node, for which is represented by this ACollisionShape
 	 * Updates shape's coords based on node's coords(called automatically by
 	 * Node).
 	 */

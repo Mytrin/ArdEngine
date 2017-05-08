@@ -8,9 +8,9 @@ package net.sf.ardengine.rpg.multiplayer.messages;
 public interface JsonMessageHandler {
 
     /**
-     * Handles incoming message with type, for which is thi handler
+     * Handles incoming message with type, for which iss thi handler
      * registered in ANetworkCore HashMap
-     * @param message
+     * @param message incoming message
      */
     public void handle(JsonMessage message);
 

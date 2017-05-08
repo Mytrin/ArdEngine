@@ -366,7 +366,6 @@ public abstract class Node implements IDrawable{
      * If intruder is instance fo Group, children will be checked for collision and
      * CollisionEvents will be invoked independently.
      * @param intruder Node, which was detected by checkAreaToList() or mayIntersectWith()
-     * @return CollisionEvent, if nodes really collide, or null
      */
     public void eventIfCollidesWith(Node intruder){
         if(!isCollideable) return;

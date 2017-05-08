@@ -104,6 +104,8 @@ public abstract class AServerCore extends ANetworkCore {
      *
      *  End with network.sendMessage(player,
      *                 new ClientReadyMessage().toString());
+     *
+     *  @param player Newly joined player
      */
     protected abstract void prepareClient(INetworkPlayer player);
 
