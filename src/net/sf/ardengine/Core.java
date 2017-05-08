@@ -39,7 +39,7 @@ public class Core {
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	/**Version of library*/
-	public static String VERSION = "Buildable";
+	public static String VERSION = "Cleanable";
 	/**True, if this build is experimental*/
 	public static final boolean DEBUG = true;
     /**True, if game currently runs in debugging mode*/
