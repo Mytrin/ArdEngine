@@ -7,14 +7,14 @@ import net.sf.ardengine.rpg.multiplayer.network.INetworkPlayer;
 /**
  * Layer between ArdEngine GroupUser and UDPLib NetworkPlayer implementation.
  */
-public class UDPLibNetworkMessage implements INetworkMessage {
+class UDPLibNetworkMessage implements INetworkMessage {
 
     private final StoredMessage messageImpl;
 
     /**
      * @param messageImpl original mesage implementation
      */
-    public UDPLibNetworkMessage(StoredMessage messageImpl) {
+    UDPLibNetworkMessage(StoredMessage messageImpl) {
         this.messageImpl = messageImpl;
     }
 

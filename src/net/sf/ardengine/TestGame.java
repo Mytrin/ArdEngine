@@ -24,29 +24,31 @@ class TestGame implements IGame{
         addDrawable(getInitBackground());
         //Sprite test
         /*Sprite pngTest = new Sprite("test/lena.bmp");
-        pngTest.setZ(-10);
+        pngTest.setZ(0);
+
 		addDrawable(pngTest);
 		Sprite jpgTest = new Sprite("test/test.jpg");
 		jpgTest.setX(200);
+        jpgTest.setZ(-10);
 		jpgTest.setScale(2);
         jpgTest.setColor(Color.BLUE);
 		jpgTest.setAngle(90);
 		addDrawable(jpgTest);
-        pngTest.setZ(10);*/
+        //pngTest.setZ(10);*/
 
         //SpriteSheet test
-        /*SpriteSheet spriteSheet = new SpriteSheet("test/spritesheet4.png", 100, 50);
+        SpriteSheet spriteSheet = new SpriteSheet("test/spritesheet4.png", 100, 50);
         spriteSheet.setX(200);
         spriteSheet.setY(300);
-        addDrawable(spriteSheet);*/
+        addDrawable(spriteSheet);
 
         //Text test
-		/*Text test = new Text("Lorem Ipsum\n" +
+		Text test = new Text("Lorem Ipsum\n" +
                 "Dolor Sit", FontManager.getFont("default"));
         test.setWrapWidth(10);
         test.setX(80);
         test.setY(10);
-        //addDrawable(test);*/
+        //addDrawable(test);
 
         Text specialChars = new Text("ÁáÉéÍíÓóÚúŮůČčŘřŽžÝýÉéěňťď", FontManager.getFont("default"));
         specialChars.setX(400);
@@ -108,6 +110,18 @@ class TestGame implements IGame{
                         System.out.println(((TextBox.TextChangeEvent)event).newValue);
                     }
                 }
+            }
+        });
+        testBox.registerListener(new IListener() {
+            @Override
+            public EventType getType() {
+                return EventType.MOUSE_CLICKED;
+            }
+
+            @Override
+            public void process(IEvent event) {
+                System.out.println("Running away!");
+                testBox.setX(testBox.getX()+ 200);
             }
         });
         addDrawable(testBox);

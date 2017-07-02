@@ -9,14 +9,14 @@ import java.io.File;
 /**
  * Layer between ArdEngine NetworkListener and UDPLib IGroupListener implementation.
  */
-public class UDPLibNetworkListener implements IGroupListener{
+class UDPLibNetworkListener implements IGroupListener{
 
     protected final INetworkListener gameListener;
 
     /**
      * @param gameListener ArdEngine NetworkListener to be mapped as IGroupListener
      */
-    public UDPLibNetworkListener(INetworkListener gameListener) {
+    UDPLibNetworkListener(INetworkListener gameListener) {
         this.gameListener = gameListener;
     }
 

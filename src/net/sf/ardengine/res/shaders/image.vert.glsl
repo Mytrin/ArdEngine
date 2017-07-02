@@ -13,7 +13,8 @@ uniform mat4 ortoMatrix;
 out vec2 UV;
 
 void main(){
-   gl_Position.xyzw = ortoMatrix * (transformMatrix * (rotationMatrix * vertexPosition));
+   gl_Position.xyzw = ortoMatrix * (transformMatrix *
+                        (rotationMatrix * vertexPosition));
 
    UV = vertexUV;
 }

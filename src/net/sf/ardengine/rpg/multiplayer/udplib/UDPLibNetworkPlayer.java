@@ -8,14 +8,14 @@ import java.net.InetAddress;
 /**
  * Layer between ArdEngine GroupUser and UDPLib NetworkPlayer implementation.
  */
-public class UDPLibNetworkPlayer implements INetworkPlayer {
+class UDPLibNetworkPlayer implements INetworkPlayer {
 
     private final GroupUser playerImpl;
 
     /**
      * @param playerImpl Implementation version of network user
      */
-    public UDPLibNetworkPlayer(GroupUser playerImpl) {
+    UDPLibNetworkPlayer(GroupUser playerImpl) {
         this.playerImpl = playerImpl;
     }
 

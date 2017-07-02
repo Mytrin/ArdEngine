@@ -19,10 +19,7 @@ void main(){
   //DEBUG
   //color = vec4(color.r, color.g, color.b, color.a);
 
-    if(color.a > transparency){
-	   color.a = transparency;
-    }
-
-  //DEBUG
-  //color = vec4(1,1,1,1);
+  if(color.a > transparency){
+	color.a = transparency;
+  }
 }

@@ -9,7 +9,6 @@ import com.gmail.lepeska.martin.udplib.util.ConfigLoader;
 import net.sf.ardengine.rpg.multiplayer.network.*;
 
 import java.io.File;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -18,13 +17,13 @@ import java.util.List;
 /**
  * Layer between ArdEngine Network and UDPLib Network implementation.
  */
-public class UDPLibNetwork implements INetwork {
+public class UDPLibNetworkAdapter implements INetwork {
 
     private final AGroupNetwork networkImpl;
     private final LinkedList<UDPLibNetworkListener> mappedListeners = new LinkedList<>();
     private final String serverAddress;
 
-    private UDPLibNetwork(String userName, String groupPassword, String hostAddress, String groupAddress, int port) throws UnknownHostException {
+    private UDPLibNetworkAdapter(String userName, String groupPassword, String hostAddress, String groupAddress, int port) throws UnknownHostException {
         this.networkImpl = new ServerGroupNetwork(userName, groupPassword, hostAddress, groupAddress, port,
                 ConfigLoader.getInt("user-info-period", 5000), ConfigLoader.getInt("dead-time", 2000));
         this.serverAddress = hostAddress;
@@ -38,11 +37,11 @@ public class UDPLibNetwork implements INetwork {
      * @param hostAddress Address in network interface, which should server socket use
      * @param groupAddress Address of used multi cast group
      * @param port Port of server socket
-     * @return new UDPLibNetwork Server instance with given setup
+     * @return new UDPLibNetworkAdapter Server instance with given setup
      * @throws UnknownHostException thrown if UDPLib fails to locate NetWorkInterface of given IP
      */
-    public static UDPLibNetwork createNetwork(String userName, String groupPassword, String hostAddress, String groupAddress, int port) throws UnknownHostException {
-        return new UDPLibNetwork(userName, groupPassword, hostAddress, groupAddress, port);
+    public static UDPLibNetworkAdapter createNetwork(String userName, String groupPassword, String hostAddress, String groupAddress, int port) throws UnknownHostException {
+        return new UDPLibNetworkAdapter(userName, groupPassword, hostAddress, groupAddress, port);
     }
 
     /**
@@ -52,11 +51,11 @@ public class UDPLibNetwork implements INetwork {
      * @param groupPassword Password required to access this group or null, if none
      * @param hostAddress Address in network interface, which should server socket use
      * @param port Port of server socket
-     * @return new UDPLibNetwork Server instance with given setup
+     * @return new UDPLibNetworkAdapter Server instance with given setup
      * @throws UnknownHostException thrown if UDPLib fails to locate NetWorkInterface of given IP
      */
-    public static UDPLibNetwork createNetwork(String userName, String groupPassword, String hostAddress, int port) throws UnknownHostException{
-        return new UDPLibNetwork(userName, groupPassword, hostAddress, ConfigLoader.getString("default-group", "225.226.227.228"), port);
+    public static UDPLibNetworkAdapter createNetwork(String userName, String groupPassword, String hostAddress, int port) throws UnknownHostException{
+        return new UDPLibNetworkAdapter(userName, groupPassword, hostAddress, ConfigLoader.getString("default-group", "225.226.227.228"), port);
     }
 
     /**
@@ -64,15 +63,15 @@ public class UDPLibNetwork implements INetwork {
      *
      * @param userName User's name in network
      * @param groupPassword Password required to access this group or null, if none
-     * @return new UDPLibNetwork Server instance with given setup
+     * @return new UDPLibNetworkAdapter Server instance with given setup
      * @throws UnknownHostException thrown if UDPLib fails to locate NetWorkInterface of given IP
      */
-    public static UDPLibNetwork createNetwork(String userName, String groupPassword) throws UnknownHostException{
-        return new UDPLibNetwork(userName, groupPassword, ConfigLoader.getString("default-server-ip", "0.0.0.0"),
+    public static UDPLibNetworkAdapter createNetwork(String userName, String groupPassword) throws UnknownHostException{
+        return new UDPLibNetworkAdapter(userName, groupPassword, ConfigLoader.getString("default-server-ip", "0.0.0.0"),
                 ConfigLoader.getString("default-group", "225.226.227.228"), ConfigLoader.getInt("default-port", 52511));
     }
 
-    private UDPLibNetwork(String userName, String groupPassword, String serverAddress, int port) throws UnknownHostException{
+    private UDPLibNetworkAdapter(String userName, String groupPassword, String serverAddress, int port) throws UnknownHostException{
         this.networkImpl = new ClientGroupNetwork(userName, groupPassword, serverAddress, port);
         this.serverAddress = serverAddress;
     }
@@ -84,11 +83,11 @@ public class UDPLibNetwork implements INetwork {
      * @param groupPassword Password required to access this group or null, if none
      * @param serverAddress Address of group owner
      * @param port Port of server socket
-     * @return new UDPLibNetwork Client instance with given setup
+     * @return new UDPLibNetworkAdapter Client instance with given setup
      * @throws UnknownHostException thrown if UDPLib fails to connect to the server
      */
-    public static UDPLibNetwork joinNetwork(String userName, String groupPassword, String serverAddress, int port) throws UnknownHostException{
-        return new UDPLibNetwork(userName, groupPassword, serverAddress, port);
+    public static UDPLibNetworkAdapter joinNetwork(String userName, String groupPassword, String serverAddress, int port) throws UnknownHostException{
+        return new UDPLibNetworkAdapter(userName, groupPassword, serverAddress, port);
     }
 
     /**
@@ -97,11 +96,11 @@ public class UDPLibNetwork implements INetwork {
      * @param userName User's name in network
      * @param groupPassword Password required to access this group or null, if none
      * @param serverAddress Address of group owner
-     * @return new UDPLibNetwork Client instance with given setup
+     * @return new UDPLibNetworkAdapter Client instance with given setup
      * @throws UnknownHostException thrown if UDPLib fails to connect to the server
      */
-    public static UDPLibNetwork joinNetwork(String userName, String groupPassword, String serverAddress) throws UnknownHostException{
-        return new UDPLibNetwork(userName, groupPassword, serverAddress, ConfigLoader.getInt("default-port", 52511));
+    public static UDPLibNetworkAdapter joinNetwork(String userName, String groupPassword, String serverAddress) throws UnknownHostException{
+        return new UDPLibNetworkAdapter(userName, groupPassword, serverAddress, ConfigLoader.getInt("default-port", 52511));
     }
 
     @Override

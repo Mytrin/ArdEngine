@@ -8,14 +8,14 @@ import java.io.File;
 /**
  * Layer between ArdEngine INetworkFileListener and UDPLib IFileShareListener implementation.
  */
-public class UDPLibFileListener implements IFileShareListener {
+class UDPLibFileListener implements IFileShareListener {
 
     protected final INetworkFileListener gameListener;
 
     /**
      * @param gameListener ArdEngine INetworkListener to be mapped as IGroupListener
      */
-    public UDPLibFileListener(INetworkFileListener gameListener) {
+    UDPLibFileListener(INetworkFileListener gameListener) {
         this.gameListener = gameListener;
     }
 
