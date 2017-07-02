@@ -57,6 +57,19 @@ public class Entity extends Node {
      */
     public void setSprite(ASprite s) {
         sprite = s;
+        sprite.setX(x);
+        sprite.setY(y);
+        sprite.setZ(z);
+        sprite.setLayoutX(layoutX);
+        sprite.setLayoutY(layoutY);
+        sprite.setLayoutOffsetCoords(layoutOffsetX, layoutOffsetY);
+        sprite.setStatic(isStaticLocked);
+        sprite.setStaticX(staticX);
+        sprite.setStaticY(staticY);
+        sprite.setColor(color);
+        sprite.setAngle(angle);
+        sprite.setScale(scale);
+        sprite.setOpacity(opacity);
     }
 
     @Override
@@ -72,9 +85,9 @@ public class Entity extends Node {
     }
 
     @Override
-    public void setLayoutY(float layoutX) {
-        super.setLayoutY(layoutX);
-        sprite.setLayoutY(layoutX);
+    public void setLayoutY(float layoutY) {
+        super.setLayoutY(layoutY);
+        sprite.setLayoutY(layoutY);
     }
 
     @Override
