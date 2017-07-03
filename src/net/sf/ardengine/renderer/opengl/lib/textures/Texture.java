@@ -44,6 +44,7 @@ public class Texture {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (textureQuality!= Config.Quality.FAST)?GL_LINEAR:GL_NEAREST);
 		
 		glTexImage2D(GL_TEXTURE_2D, 0, format.getInternalFormat(), width, height, 0, format.getFormat(), format.getType(), data);
+		glFlush();
 	}
 	
 	/**

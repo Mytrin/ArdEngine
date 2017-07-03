@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public final class Util {
 
@@ -51,18 +52,19 @@ public final class Util {
 	 * @throws IOException thrown if file does not exists or is not readable
 	 */
 	public static ByteBuffer fileToByteBuffer(File source) throws IOException{
-		ByteBuffer buffer = BufferUtils.createByteBuffer((int)source.length() + 1);
-
+		ByteBuffer buffer = BufferUtils.createByteBuffer((int)source.length());
 		FileInputStream fis = new FileInputStream(source);
 		FileChannel fc = fis.getChannel();
 
-		while( fc.read(buffer) != -1 ){};
+        //read() returns number of read bytes or -1
+		while( fc.read(buffer) < 1){};
 			
 		fis.close();
 		fc.close();
-		
+
 		buffer.flip();
-		return buffer;
+
+        return buffer;
 	}
 	
 	/**
@@ -98,5 +100,36 @@ public final class Util {
 		buffer.flip();
 		return buffer;
 	}
+
+    /**
+     * Writes buffer content to file. Existing file content is deleted.
+     * @param target target file
+     * @param data buffer with data
+     * @return true, if successfully written data to file
+     */
+	public static boolean writeBufferToFile(File target, ByteBuffer data){
+        try{
+            if(target.exists()) target.delete();
+            target.createNewFile();
+
+            byte[] toWrite = data.hasArray()?data.array():createBufferArray(data);
+
+            Files.write(target.toPath(),toWrite,
+                    StandardOpenOption.WRITE);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    private static byte[] createBufferArray(ByteBuffer data){
+        byte[] array = new byte[data.limit()];
+
+        for(int i=0; i < data.limit(); i++){
+            array[i] = data.get(i);
+        }
+
+        return array;
+    }
 
 }

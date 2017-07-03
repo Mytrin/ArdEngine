@@ -17,6 +17,9 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -243,9 +246,10 @@ public class TextureManager {
 				throw new RuntimeException("Failed to read image information: " + stbi_failure_reason());
 			}
 
-			ByteBuffer decodedImage = stbi_load_from_memory(imageBuffer, w, h, comp, 0);
-			
-			Texture newTexture = new Texture(name, w.get(0), h.get(0), decodedImage, (comp.get(0)==4)?TextureFormat.RGBA_B:TextureFormat.RGB_B);	
+			// GL shaders render wrong, when accessing non-existing alpha channel.
+			// That could be solved, however Legacy GL is unfixable.
+			ByteBuffer decodedImage = stbi_load_from_memory(imageBuffer, w, h, comp, 4);
+			Texture newTexture = new Texture(name, w.get(0), h.get(0), decodedImage, TextureFormat.RGBA_B);
 			textures.put(name, newTexture);
 		}
 	}

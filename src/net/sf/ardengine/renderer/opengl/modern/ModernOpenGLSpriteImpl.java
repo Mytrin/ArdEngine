@@ -30,8 +30,8 @@ public class ModernOpenGLSpriteImpl extends ModernOpenGLRenderable implements IS
 									0f,  0f,
 									0f,  1f,
 									1f,  0f,
-									1f,  1f  
-	};	
+									1f,  1f
+	};
 	protected final static FloatBuffer textureUVCoordinatesBuffer = BufferUtils.createFloatBuffer(textureUVCoordinates.length);
 	static{
 		textureUVCoordinatesBuffer.put(textureUVCoordinates);
