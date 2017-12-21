@@ -41,7 +41,7 @@ public abstract class Node implements IDrawable{
     /**Rotation of this Node, if it's possible */
     protected float angle=0f;
 	/**Color or fill, if it's possible*/
-	protected Color color = Color.BLACK;
+	protected Color color = Color.WHITE;
 
     /**Listeners checking events at this Node*/
 	protected List<IListener> listeners = new LinkedList<>();
