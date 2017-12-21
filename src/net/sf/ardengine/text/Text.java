@@ -1,5 +1,6 @@
 package net.sf.ardengine.text;
 
+import javafx.scene.paint.Color;
 import net.sf.ardengine.Core;
 import net.sf.ardengine.Node;
 import net.sf.ardengine.renderer.IDrawableImpl;
@@ -16,15 +17,14 @@ public class Text extends Node {
 	private final ITextImpl implementation;
 	
 	public Text(String text, IFont font, int wrapWidth) {
-		this.text = text;
-		this.font = font;
+		this(text, font);
 		this.wrapWidth = wrapWidth;
-		implementation = Core.renderer.createTextImplementation(font, this);
 	}
 	
 	public Text(String text, IFont font) {
 		this.text = text;
 		this.font = font;
+		this.color = Color.BLACK;
 		implementation = Core.renderer.createTextImplementation(font, this);
 	}
 

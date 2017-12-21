@@ -2,10 +2,7 @@ package net.sf.ardengine;
 
 import javafx.scene.paint.Color;
 import net.sf.ardengine.collisions.CollisionPolygon;
-import net.sf.ardengine.events.AEvent;
-import net.sf.ardengine.events.EventType;
-import net.sf.ardengine.events.IEvent;
-import net.sf.ardengine.events.IListener;
+import net.sf.ardengine.events.*;
 import net.sf.ardengine.input.TextBox;
 import net.sf.ardengine.shapes.Circle;
 import net.sf.ardengine.shapes.Line;
@@ -96,11 +93,7 @@ class TestGame implements IGame{
         TextBox testBox = new TextBox(175, 32);
         testBox.setX(100);
         testBox.setY(400);
-        testBox.registerListener(new IListener() {
-            @Override
-            public EventType getType() {
-                return EventType.CUSTOM;
-            }
+        testBox.registerListener(new AListener(EventType.CUSTOM) {
 
             @Override
             public void process(IEvent event) {
@@ -112,11 +105,7 @@ class TestGame implements IGame{
                 }
             }
         });
-        testBox.registerListener(new IListener() {
-            @Override
-            public EventType getType() {
-                return EventType.MOUSE_CLICKED;
-            }
+        testBox.registerListener(new AListener(EventType.MOUSE_CLICKED) {
 
             @Override
             public void process(IEvent event) {
@@ -131,11 +120,7 @@ class TestGame implements IGame{
         version.setY(570);
         version.setCollideable(true);
         version.getCollisions().add(new CollisionPolygon(new float[]{0,0, 15,0, 15,15, 0,15}, version));
-        version.registerListener(new IListener() {
-            @Override
-            public EventType getType() {
-                return EventType.MOUSE_CLICKED;
-            }
+        version.registerListener(new AListener(EventType.MOUSE_CLICKED) {
 
             @Override
             public void process(IEvent event) {

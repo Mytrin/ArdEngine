@@ -328,7 +328,7 @@ public abstract class Node implements IDrawable{
      * @return Nodes which's privateArea is intersecting with this as ArrayList
      */
     public  LinkedList<Node> checkAreaToList(){
-        LinkedList<Node> intruders= new LinkedList<>();
+        LinkedList<Node> intruders = new LinkedList<>();
 
         if(!isCollideable) return intruders;
 
@@ -443,6 +443,6 @@ public abstract class Node implements IDrawable{
         /**
          * action for next frame
          */
-        public void action();
+        void action();
     }
 }
